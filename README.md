@@ -4,7 +4,10 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
 ![GitHub Actions](https://github.com/nejcc/php-datatypes/actions/workflows/main.yml/badge.svg)
 
-PHP Datatypes is a flexible and efficient library for working with native data types, such as integers, floats, strings, and more. This package provides strict, type-safe operations and arithmetic for primitive data types, including extended support for different bit lengths (e.g., UInt8, Float32, etc.). It is built with extensibility in mind, making it easy to add more datatypes and custom behavior as needed.
+I'm excited to share my latest PHP package, PHP Datatypes. This library introduces a flexible yet strict way of handling primitive data types like integers, floats, and strings in PHP. It emphasizes type safety and precision, supporting operations for signed and unsigned integers (Int8, UInt8, etc.) and various floating-point formats (Float32, Float64, etc.).
+
+With PHP Datatypes, you get fine-grained control over the data you handle, ensuring your operations stay within valid ranges. It's perfect for anyone looking to avoid common pitfalls like overflows, division by zero, and unexpected type juggling in PHP.
+
 ## Installation
 
 You can install the package via composer:
