@@ -7,23 +7,23 @@ namespace Nejcc\PhpDatatypes\Floats;
 use Nejcc\PhpDatatypes\Abstract\AbstractFloat;
 
 /**
- * Represents a 32-bit float.
+ * Represents an 8-bit float.
  *
  * @package Nejcc\PhpDatatypes\Floats
  */
-final class Float32 extends AbstractFloat
+final class Float8 extends AbstractFloat
 {
     /**
-     * The minimum allowable value for Float32.
+     * The minimum allowable value for Float8.
      *
      * @var float
      */
-    public const MIN_VALUE = -3.4028235e38;
+    public const MIN_VALUE = -240.0;
 
     /**
-     * The maximum allowable value for Float32.
+     * The maximum allowable value for Float8.
      *
      * @var float
      */
-    public const MAX_VALUE = 3.4028235e38;
+    public const MAX_VALUE = 240.0;
 }

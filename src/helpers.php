@@ -1,5 +1,11 @@
 <?php
+declare(strict_types=1);
 
+use Nejcc\PhpDatatypes\Floats\Float128;
+use Nejcc\PhpDatatypes\Floats\Float16;
+use Nejcc\PhpDatatypes\Floats\Float32;
+use Nejcc\PhpDatatypes\Floats\Float64;
+use Nejcc\PhpDatatypes\Floats\Float8;
 use Nejcc\PhpDatatypes\Integers\Signed\Int16;
 use Nejcc\PhpDatatypes\Integers\Signed\Int32;
 use Nejcc\PhpDatatypes\Integers\Signed\Int8;
@@ -57,3 +63,29 @@ function uint32(int $value): UInt32
 //{
 //    return new UInt128($value);
 //}
+
+
+function float8(float $value): Float8
+{
+    return new Float8($value);
+}
+
+function float16(float $value): Float16
+{
+    return new Float16($value);
+}
+
+function float32(float $value): Float32
+{
+    return new Float32($value);
+}
+
+function float64(float $value): Float64
+{
+    return new Float64($value);
+}
+
+function float128(float $value): Float128
+{
+    return new Float128($value);
+}
