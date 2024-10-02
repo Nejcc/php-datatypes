@@ -14,21 +14,31 @@ use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
  *
  * @package Nejcc\PhpDatatypes\Integers
  */
-abstract class AbstractBigInteger implements BigIntegerInterface, NativeIntegerInterface
+abstract class AbstractBigInteger implements BigIntegerInterface
 {
     use ArithmeticOperationsTrait;
     use IntegerComparisonTrait;
 
+    /**
+     * @var string
+     */
     protected readonly string $value;
 
     public const MIN_VALUE = null;
     public const MAX_VALUE = null;
 
+    /**
+     * @param int|string $value
+     */
     public function __construct(int|string $value)
     {
         $this->setValue($value);
     }
 
+    /**
+     * @param int|string $value
+     * @return void
+     */
     protected function setValue(int|string $value): void
     {
         $valueStr = (string)$value;
@@ -44,18 +54,30 @@ abstract class AbstractBigInteger implements BigIntegerInterface, NativeIntegerI
         $this->value = $valueStr;
     }
 
+    /**
+     * @return string
+     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    // Implement comparison method
+    /**
+     * @param NativeIntegerInterface|BigIntegerInterface $other
+     * @return int
+     */
     public function compare(NativeIntegerInterface|BigIntegerInterface $other): int
     {
         return bccomp($this->value, (string)$other->getValue());
     }
 
-    // Implement operation methods required by the trait
+
+    /**
+     * @param BigIntegerInterface|NativeIntegerInterface $other
+     * @param callable $operation
+     * @param string $operationName
+     * @return $this
+     */
     protected function performOperation(
         BigIntegerInterface|NativeIntegerInterface $other,
         callable $operation,
@@ -71,21 +93,41 @@ abstract class AbstractBigInteger implements BigIntegerInterface, NativeIntegerI
         return new static($result);
     }
 
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
     protected function addValues(string $a, string $b): string
     {
         return bcadd($a, $b, 0);
     }
 
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
     protected function subtractValues(string $a, string $b): string
     {
         return bcsub($a, $b, 0);
     }
 
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
     protected function multiplyValues(string $a, string $b): string
     {
         return bcmul($a, $b, 0);
     }
 
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
     protected function divideValues(string $a, string $b): string
     {
         if ($b === '0') {
@@ -101,6 +143,11 @@ abstract class AbstractBigInteger implements BigIntegerInterface, NativeIntegerI
         return $result;
     }
 
+    /**
+     * @param string $a
+     * @param string $b
+     * @return string
+     */
     protected function modValues(string $a, string $b): string
     {
         if ($b === '0') {

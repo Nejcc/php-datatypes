@@ -23,11 +23,18 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     public const MIN_VALUE = null;
     public const MAX_VALUE = null;
 
+    /**
+     * @param int $value
+     */
     public function __construct(int $value)
     {
         $this->setValue($value);
     }
 
+    /**
+     * @param int $value
+     * @return void
+     */
     protected function setValue(int $value): void
     {
         if ($value < static::MIN_VALUE || $value > static::MAX_VALUE) {
@@ -41,16 +48,29 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         $this->value = $value;
     }
 
+    /**
+     * @return int
+     */
     public function getValue(): int
     {
         return $this->value;
     }
 
+    /**
+     * @param NativeIntegerInterface $other
+     * @return int
+     */
     public function compare(NativeIntegerInterface $other): int
     {
         return $this->value <=> $other->getValue();
     }
 
+    /**
+     * @param NativeIntegerInterface $other
+     * @param callable $operation
+     * @param string $operationName
+     * @return $this
+     */
     protected function performOperation(
         NativeIntegerInterface $other,
         callable $operation,
@@ -66,21 +86,41 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         return new static($result);
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
     protected function addValues(int $a, int $b): int
     {
         return $a + $b;
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
     protected function subtractValues(int $a, int $b): int
     {
         return $a - $b;
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
     protected function multiplyValues(int $a, int $b): int
     {
         return $a * $b;
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
     protected function divideValues(int $a, int $b): int
     {
         if ($b === 0) {
@@ -94,6 +134,11 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         return intdiv($a, $b);
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return int
+     */
     protected function modValues(int $a, int $b): int
     {
         if ($b === 0) {

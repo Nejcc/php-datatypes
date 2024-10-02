@@ -26,6 +26,4 @@ final class Int32 extends AbstractNativeInteger
      * @var int
      */
     public const MAX_VALUE = 2147483647;
-
-    // Inherit methods from AbstractInteger.
 }
