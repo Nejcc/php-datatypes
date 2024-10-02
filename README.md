@@ -1,4 +1,4 @@
-# Very short description of the package
+# PHP strict DataTypes
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
 [![Total Downloads](https://img.shields.io/packagist/dt/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
@@ -16,6 +16,30 @@ composer require nejcc/php-datatypes
 ## Usage
 
 Below are examples of how to use the basic integer and float classes in your project.
+
+
+### Laravel example
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
+
+class TestController
+{
+    public UInt8 $user_id;
+    public function __invoke(Request $request)
+    {
+        $this->user_id = uint8($request->input('user_id'));
+        dd($this->user_id->getValue());
+    }
+}
+```
+
+PHP examples
 
 ### Integers
 ```php
