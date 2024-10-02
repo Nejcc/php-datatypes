@@ -46,13 +46,11 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         return $this->value;
     }
 
-    // Implement comparison method
     public function compare(NativeIntegerInterface $other): int
     {
         return $this->value <=> $other->getValue();
     }
 
-    // Implement operation methods required by the trait
     protected function performOperation(
         NativeIntegerInterface $other,
         callable $operation,

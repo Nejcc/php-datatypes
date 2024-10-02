@@ -38,6 +38,4 @@ trait ArithmeticOperationsTrait
     {
         return $this->performOperation($other, [$this, 'modValues'], 'mod');
     }
-
-    // The methods addValues, subtractValues, etc., will be implemented in the abstract classes
 }

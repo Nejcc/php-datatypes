@@ -4,24 +4,16 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Integers\Unsigned;
 
-use Nejcc\PhpDatatypes\Abstract\AbstractInteger;
-use Nejcc\PhpDatatypes\Interfaces\IntegerInterface;
+use Nejcc\PhpDatatypes\Abstract\AbstractNativeInteger;
 
-final class UInt8 extends AbstractInteger
+
+/**
+ * Represents an 8-bit unsigned integer.
+ *
+ * @package Nejcc\PhpDatatypes\Integers\Unsigned
+ */
+final class UInt8 extends AbstractNativeInteger
 {
-    protected function getMinValue(): int|string
-    {
-        return 0;
-    }
-
-    protected function getMaxValue(): int|string
-    {
-        return 255;
-    }
-
-    public function add(IntegerInterface $other): static
-    {
-        $result = $this->value + $other->getValue();
-        return new static($result);
-    }
+    public const MIN_VALUE = 0;
+    public const MAX_VALUE = 255;
 }
