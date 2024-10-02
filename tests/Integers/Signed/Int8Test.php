@@ -10,13 +10,13 @@ use PHPUnit\Framework\TestCase;
 
 class Int8Test extends TestCase
 {
-    public function testValidValueInitialization()
+    public function testValidInitialization()
     {
         $int8 = new Int8(127);
         $this->assertSame(127, $int8->getValue());
     }
 
-    public function testInvalidValueInitialization()
+    public function testInvalidInitialization()
     {
         $this->expectException(\OutOfRangeException::class);
         new Int8(128);
@@ -25,32 +25,32 @@ class Int8Test extends TestCase
     public function testAdditionWithinBounds()
     {
         $int8a = new Int8(50);
-        $int8b = new Int8(70);
+        $int8b = new Int8(77);
         $int8c = $int8a->add($int8b);
-        $this->assertSame(120, $int8c->getValue());
+        $this->assertSame(127, $int8c->getValue());
     }
 
     public function testAdditionOverflow()
     {
         $this->expectException(\OverflowException::class);
         $int8a = new Int8(100);
-        $int8b = new Int8(30);
+        $int8b = new Int8(50);
         $int8a->add($int8b);
     }
 
     public function testSubtractionWithinBounds()
     {
         $int8a = new Int8(-50);
-        $int8b = new Int8(-70);
+        $int8b = new Int8(-77);
         $int8c = $int8a->subtract($int8b);
-        $this->assertSame(20, $int8c->getValue());
+        $this->assertSame(27, $int8c->getValue());
     }
 
     public function testSubtractionUnderflow()
     {
         $this->expectException(\UnderflowException::class);
         $int8a = new Int8(-100);
-        $int8b = new Int8(30);
+        $int8b = new Int8(50);
         $int8a->subtract($int8b);
     }
 
@@ -83,6 +83,14 @@ class Int8Test extends TestCase
         $this->expectException(\DivisionByZeroError::class);
         $int8a = new Int8(100);
         $int8b = new Int8(0);
+        $int8a->divide($int8b);
+    }
+
+    public function testDivisionResultNotInteger()
+    {
+        $this->expectException(\UnexpectedValueException::class);
+        $int8a = new Int8(5);
+        $int8b = new Int8(2);
         $int8a->divide($int8b);
     }
 
