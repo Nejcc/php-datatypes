@@ -1,4 +1,4 @@
-# PHP strict DataTypes
+# Introducing PHP Datatypes: A Strict and Safe Way to Handle Primitive Data Types
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
 [![Total Downloads](https://img.shields.io/packagist/dt/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
