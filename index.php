@@ -1,9 +1,7 @@
 <?php
 
-use Nejcc\PhpDatatypes\Integers\Signed\Int128;
 use Nejcc\PhpDatatypes\Integers\Signed\Int16;
 use Nejcc\PhpDatatypes\Integers\Signed\Int32;
-use Nejcc\PhpDatatypes\Integers\Signed\Int64;
 use Nejcc\PhpDatatypes\Integers\Signed\Int8;
 use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
 

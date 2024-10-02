@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nejcc\PhpDatatypes\Integers\Signed;
+namespace Nejcc\PhpDatatypes\Integers\special;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractBigInteger;
 
