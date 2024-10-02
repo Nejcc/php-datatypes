@@ -4,6 +4,20 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/nejcc/php-datatypes.svg?style=flat-square)](https://packagist.org/packages/nejcc/php-datatypes)
 ![GitHub Actions](https://github.com/nejcc/php-datatypes/actions/workflows/main.yml/badge.svg)
 
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+
+
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+
 I'm excited to share my latest PHP package, PHP Datatypes. This library introduces a flexible yet strict way of handling primitive data types like integers, floats, and strings in PHP. It emphasizes type safety and precision, supporting operations for signed and unsigned integers (Int8, UInt8, etc.) and various floating-point formats (Float32, Float64, etc.).
 
 With PHP Datatypes, you get fine-grained control over the data you handle, ensuring your operations stay within valid ranges. It's perfect for anyone looking to avoid common pitfalls like overflows, division by zero, and unexpected type juggling in PHP.
