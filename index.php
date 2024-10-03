@@ -69,53 +69,95 @@ final class TestExamples
     {
         /*
          * Test only
-            array (size=10)
-              'years' =>
-                object(Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8)[4]
-                  protected readonly int 'value' => int 33
-              'account_number' =>
-                object(Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32)[5]
-                  protected readonly int 'value' => int 343233
-              'account_balance' =>
-                object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32)[6]
-                  protected readonly float 'value' => float 1234.56
-              'investment_amount' =>
-                object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64)[7]
-                  protected readonly float 'value' => float 78910.12345
-              'grade' =>
-                object(Nejcc\PhpDatatypes\Scalar\Char)[8]
-                  private string 'value' => string 'A' (length=1)
-              'age' =>
-                object(Nejcc\PhpDatatypes\Scalar\Byte)[9]
-                  private int 'value' => int 25
-              'names' =>
-                object(Nejcc\PhpDatatypes\Composite\Arrays\StringArray)[10]
-                  private array 'value' =>
-                    array (size=3)
-                      0 => string 'John' (length=4)
-                      1 => string 'Jane' (length=4)
-                      2 => string 'Doe' (length=3)
-              'scores' =>
-                object(Nejcc\PhpDatatypes\Composite\Arrays\IntArray)[11]
-                  private array 'value' =>
-                    array (size=3)
-                      0 => int 100
-                      1 => int 95
-                      2 => int 87
-              'weights' =>
-                object(Nejcc\PhpDatatypes\Composite\Arrays\FloatArray)[12]
-                  private array 'value' =>
-                    array (size=3)
-                      0 => float 60.5
-                      1 => float 72.3
-                      2 => float 88.9
-              'data' =>
-                object(Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice)[13]
-                  private array 'value' =>
-                    array (size=3)
-                      0 => int 255
-                      1 => int 128
-                      2 => int 0
+
+array (size=14)
+  'years' =>
+    object(Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8)[4]
+      protected readonly int 'value' => int 33
+  'account_number' =>
+    object(Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32)[5]
+      protected readonly int 'value' => int 343233
+  'account_balance' =>
+    object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32)[6]
+      protected readonly float 'value' => float 1234.56
+  'investment_amount' =>
+    object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64)[7]
+      protected readonly float 'value' => float 78910.12345
+  'grade' =>
+    object(Nejcc\PhpDatatypes\Scalar\Char)[8]
+      private string 'value' => string 'A' (length=1)
+  'age' =>
+    object(Nejcc\PhpDatatypes\Scalar\Byte)[9]
+      private int 'value' => int 25
+  'names' =>
+    object(Nejcc\PhpDatatypes\Composite\Arrays\StringArray)[10]
+      private array 'value' =>
+        array (size=3)
+          0 => string 'John' (length=4)
+          1 => string 'Jane' (length=4)
+          2 => string 'Doe' (length=3)
+  'scores' =>
+    object(Nejcc\PhpDatatypes\Composite\Arrays\IntArray)[11]
+      private array 'value' =>
+        array (size=3)
+          0 => int 100
+          1 => int 95
+          2 => int 87
+  'weights' =>
+    object(Nejcc\PhpDatatypes\Composite\Arrays\FloatArray)[12]
+      private array 'value' =>
+        array (size=3)
+          0 => float 60.5
+          1 => float 72.3
+          2 => float 88.9
+  'data' =>
+    object(Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice)[13]
+      private array 'value' =>
+        array (size=3)
+          0 => int 255
+          1 => int 128
+          2 => int 0
+  'listData' =>
+    object(Nejcc\PhpDatatypes\Composite\ListData)[14]
+      private array 'elements' =>
+        array (size=3)
+          0 => string 'apple' (length=5)
+          1 => string 'banana' (length=6)
+          2 => string 'orange' (length=6)
+  'dictionary' =>
+    object(Nejcc\PhpDatatypes\Composite\Dictionary)[15]
+      private array 'elements' =>
+        array (size=3)
+          'name' => string 'Nejc' (length=4)
+          'age' => int 99
+          'country' => string 'Slovenia' (length=8)
+  'struct' =>
+    object(Nejcc\PhpDatatypes\Composite\Struct\Struct)[16]
+      private array 'fields' =>
+        array (size=3)
+          'name' =>
+            array (size=2)
+              ...
+          'age' =>
+            array (size=2)
+              ...
+          'balance' =>
+            array (size=2)
+              ...
+  'struct_all' =>
+    array (size=3)
+      'name' =>
+        array (size=2)
+          'type' => string 'string' (length=6)
+          'value' => string 'Nejc' (length=4)
+      'age' =>
+        array (size=2)
+          'type' => string 'int' (length=3)
+          'value' => int 30
+      'balance' =>
+        array (size=2)
+          'type' => string 'float' (length=5)
+          'value' => float 250.75
          */
         return [
             'years'             => $this->years,
@@ -131,7 +173,7 @@ final class TestExamples
             'listData'          => $this->listData,
             'dictionary'        => $this->dictionary,
             'struct'            => $this->struct,
-            'struct_all'            => $this->struct->getFields(),
+            'struct_all'        => $this->struct->getFields(),
         ];
     }
 }
