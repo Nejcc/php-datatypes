@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Signed;
 
-use Nejcc\PhpDatatypes\Interfaces\IntegerInterface;
+
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 use PHPUnit\Framework\TestCase;
 
