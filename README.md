@@ -51,12 +51,11 @@ This approach has a few key benefits:
 ### Laravel example
 
 here's how it can be used in practice across different types, focusing on strict handling for both integers and floats:
+
 ```php
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
-use Nejcc\PhpDatatypes\Floats\Float32;
+use Illuminate\Http\Request;use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32;use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 
 class TestController
 {
@@ -86,9 +85,9 @@ Here, we're not only safeguarding user IDs but also handling potentially complex
 PHP examples
 
 ### Integers
+
 ```php
-use Nejcc\PhpDatatypes\Integers\Signed\Int8;
-use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
+use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 
 $int8 = new Int8(-128); // Minimum value for Int8
 echo $int8->getValue(); // -128
@@ -98,9 +97,9 @@ echo $uint8->getValue(); // 255
 ```
 
 ### Floats
+
 ```php
-use Nejcc\PhpDatatypes\Floats\Float32;
-use Nejcc\PhpDatatypes\Floats\Float64;
+use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32;use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64;
 
 $float32 = new Float32(3.14);
 echo $float32->getValue(); // 3.14
@@ -110,8 +109,9 @@ echo $float64->getValue(); // 1.7976931348623157e308
 ```
 
 ### Arithmetic Operations
+
 ```php
-use Nejcc\PhpDatatypes\Integers\Signed\Int8;
+use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 
 $int1 = new Int8(50);
 $int2 = new Int8(30);
@@ -120,6 +120,66 @@ $result = $int1->add($int2); // Performs addition
 echo $result->getValue(); // 80
 
 ```
+
+# ROAD MAP
+
+```md
+Data Types
+│
+├── Scalar Types
+│   ├── Integer Types
+│   │   ├── Signed Integers
+│   │   │   ├── &check; Int8 
+│   │   │   ├── &check; Int16
+│   │   │   ├── &check; Int32
+│   │   │   ├── Int64
+│   │   │   └── Int128
+│   │   └── Unsigned Integers
+│   │       ├── &check; UInt8
+│   │       ├── &check; UInt16
+│   │       ├── &check; UInt32
+│   │       ├── UInt64
+│   │       └── UInt128
+│   ├── Floating Point Types
+│   │   ├── &check; Float32
+│   │   ├── &check; Float64
+│   │   ├── Double
+│   │   └── Double Floating Point
+│   ├── Boolean
+│   │   └── Boolean (true/false)
+│   ├── Char
+│   └── Byte
+│
+├── Composite Types
+│   ├── Arrays
+│   │   ├── StringArray
+│   │   ├── IntArray
+│   │   ├── FloatArray
+│   │   └── Byte Slice
+│   ├── Struct
+│   │   └── struct { fields of different types }
+│   ├── Union
+│   │   └── union { shared memory for different types }
+│   ├── List
+│   └── Dictionary
+│
+├── Reference Types
+│   ├── Reference Pointer
+│   ├── Void (Nullable)
+│   └── Channel (Concurrency)
+│
+├── Map Types
+│   ├── Hashmap
+│   └── Map
+│
+└── Specialized Types
+    ├── String
+    ├── Double
+    ├── Slice
+    ├── Map
+    └── Channel
+```
+
 
 ### Testing
 
