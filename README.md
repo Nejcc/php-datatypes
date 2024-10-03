@@ -35,26 +35,53 @@ composer require nejcc/php-datatypes
 Below are examples of how to use the basic integer and float classes in your project.
 
 
+This approach has a few key benefits:
+
+- Type Safety: By explicitly defining the data types like UInt8, you're eliminating the risk of invalid values sneaking into your application. For example, enforcing unsigned integers ensures that the value remains within valid ranges, offering a safeguard against unexpected data inputs.
+
+
+- Precision: Especially with floating-point numbers, handling precision can be tricky in PHP due to how it manages floats natively. By offering precise types such as Float32 or Float64, we're giving developers the control they need to maintain consistency in calculations.
+
+
+- Range Safeguards: By specifying exact ranges, you can prevent issues like overflows or underflows that often go unchecked in dynamic typing languages like PHP.
+
+
+- Readability and Maintenance: Explicit data types improve code readability. When a developer reads your code, they instantly know what type of value is expected and the constraints around that value. This enhances long-term maintainability.
+
 ### Laravel example
 
+here's how it can be used in practice across different types, focusing on strict handling for both integers and floats:
 ```php
-<?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
+use Nejcc\PhpDatatypes\Floats\Float32;
 
 class TestController
 {
     public UInt8 $user_id;
+    public Float32 $account_balance;
+
     public function __invoke(Request $request)
     {
+        // Validating and assigning UInt8 (ensures non-negative user ID)
         $this->user_id = uint8($request->input('user_id'));
-        dd($this->user_id->getValue());
+        
+        // Validating and assigning Float32 (ensures correct precision)
+        $this->account_balance = float32($request->input('account_balance'));
+        
+        // Now you can safely use the $user_id and $account_balance knowing they are in the right range
+        dd([
+            'user_id' => $this->user_id->getValue(),
+            'account_balance' => $this->account_balance->getValue(),
+        ]);
     }
 }
+
 ```
+Here, we're not only safeguarding user IDs but also handling potentially complex floating-point operations, where precision is critical. This could be especially beneficial for applications in fields like finance or analytics where data integrity is paramount.
+
 
 PHP examples
 
