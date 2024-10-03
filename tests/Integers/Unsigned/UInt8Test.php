@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Unsigned;
 
-use Nejcc\PhpDatatypes\Integers\Unsigned\UInt8;
+use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 use PHPUnit\Framework\TestCase;
 
 class UInt8Test extends TestCase
@@ -39,7 +39,7 @@ class UInt8Test extends TestCase
 
     public function testSubtractionWithinBounds()
     {
-        $uint8a = new UInt8(200);
+        $uint8a = new \Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8(200);
         $uint8b = new UInt8(50);
         $uint8c = $uint8a->subtract($uint8b);
         $this->assertSame(150, $uint8c->getValue());
@@ -56,7 +56,7 @@ class UInt8Test extends TestCase
     public function testMultiplicationWithinBounds()
     {
         $uint8a = new UInt8(10);
-        $uint8b = new UInt8(20);
+        $uint8b = new \Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8(20);
         $uint8c = $uint8a->multiply($uint8b);
         $this->assertSame(200, $uint8c->getValue());
     }

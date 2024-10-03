@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
 
-use Nejcc\PhpDatatypes\Floats\Float64;
+use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64;
 use PHPUnit\Framework\TestCase;
 
 final class Float64Test extends TestCase

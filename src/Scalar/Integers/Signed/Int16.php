@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nejcc\PhpDatatypes\Integers\Signed;
+namespace Nejcc\PhpDatatypes\Scalar\Integers\Signed;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractNativeInteger;
 

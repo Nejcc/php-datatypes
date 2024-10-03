@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
 
-use Nejcc\PhpDatatypes\Floats\Float32;
+use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32;
 use PHPUnit\Framework\TestCase;
 
 final class Float32Test extends TestCase

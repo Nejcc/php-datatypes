@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nejcc\PhpDatatypes\Integers\Unsigned;
+namespace Nejcc\PhpDatatypes\Scalar\Integers\Unsigned;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractNativeInteger;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Signed;
 
-use Nejcc\PhpDatatypes\Integers\Signed\Int32;
 use Nejcc\PhpDatatypes\Interfaces\IntegerInterface;
+use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int32;
 use PHPUnit\Framework\TestCase;
 
 class Int32Test extends TestCase

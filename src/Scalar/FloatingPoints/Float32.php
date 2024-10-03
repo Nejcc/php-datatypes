@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Nejcc\PhpDatatypes\Floats;
+namespace Nejcc\PhpDatatypes\Scalar\FloatingPoints;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractFloat;
 

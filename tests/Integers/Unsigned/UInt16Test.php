@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Unsigned;
 
-use Nejcc\PhpDatatypes\Integers\Unsigned\UInt16;
+use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt16;
 use PHPUnit\Framework\TestCase;
 
 class UInt16Test extends TestCase
@@ -55,7 +55,7 @@ class UInt16Test extends TestCase
 
     public function testMultiplicationWithinBounds()
     {
-        $uint16a = new UInt16(3000);
+        $uint16a = new \Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt16(3000);
         $uint16b = new UInt16(20);
         $uint16c = $uint16a->multiply($uint16b);
         $this->assertSame(60000, $uint16c->getValue());
