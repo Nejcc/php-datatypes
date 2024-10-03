@@ -4,17 +4,19 @@ use Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice;
 use Nejcc\PhpDatatypes\Composite\Arrays\FloatArray;
 use Nejcc\PhpDatatypes\Composite\Arrays\IntArray;
 use Nejcc\PhpDatatypes\Composite\Arrays\StringArray;
+use Nejcc\PhpDatatypes\Composite\Dictionary;
+use Nejcc\PhpDatatypes\Composite\ListData;
+use Nejcc\PhpDatatypes\Composite\Struct\Struct;
 use Nejcc\PhpDatatypes\Scalar\Byte;
+use Nejcc\PhpDatatypes\Scalar\Char;
 use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32;
 use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64;
-use Nejcc\PhpDatatypes\Scalar\Char;
-use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int16;
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-class TestExamples
+final class TestExamples
 {
     private Float32 $account_balance;
     private Float64 $investment_amount;
@@ -26,6 +28,9 @@ class TestExamples
     private ByteSlice $data;
     private Int8 $years;
     private UInt32 $account_number;
+    private ListData $listData;
+    private Dictionary $dictionary;
+    private Struct $struct;
 
     public function __construct()
     {
@@ -42,6 +47,21 @@ class TestExamples
         $this->scores = new IntArray([100, 95, 87]);
         $this->weights = new FloatArray([60.5, 72.3, 88.9]);
         $this->data = new ByteSlice([255, 128, 0]);
+
+        $this->listData = new ListData(['apple', 'banana', 'orange']);
+        $this->dictionary = new Dictionary(['name' => 'Nejc', 'age' => 99, 'country' => 'Slovenia']);
+
+        $this->struct = new Struct([
+            'name'    => 'string',
+            'age'     => 'int',
+            'balance' => 'float'
+        ]);
+
+        // Setting field values
+        $this->struct->set('name', 'Nejc');
+        $this->struct->set('age', 30);
+        $this->struct->set('balance', 250.75);
+
 
     }
 
@@ -108,6 +128,10 @@ class TestExamples
             'scores'            => $this->scores,
             'weights'           => $this->weights,
             'data'              => $this->data,
+            'listData'          => $this->listData,
+            'dictionary'        => $this->dictionary,
+            'struct'            => $this->struct,
+            'struct_all'            => $this->struct->getFields(),
         ];
     }
 }
