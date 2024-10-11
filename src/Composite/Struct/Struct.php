@@ -6,6 +6,9 @@ use InvalidArgumentException;
 
 final class Struct
 {
+    /**
+     * @var array
+     */
     private array $fields = [];
 
     public function __construct(array $fields)
@@ -15,7 +18,11 @@ final class Struct
         }
     }
 
-    // Add a field with a specific type
+    /**
+     * @param string $name
+     * @param string $type
+     * @return void
+     */
     public function addField(string $name, string $type): void
     {
         $this->fields[$name] = [
@@ -24,7 +31,12 @@ final class Struct
         ];
     }
 
-    // Set the value of a field, ensuring it matches the type
+
+    /**
+     * @param string $name
+     * @param $value
+     * @return void
+     */
     public function set(string $name, $value): void
     {
         if (!isset($this->fields[$name])) {
@@ -42,7 +54,11 @@ final class Struct
         $this->fields[$name]['value'] = $value;
     }
 
-    // Get the value of a field
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
     public function get(string $name)
     {
         if (!isset($this->fields[$name])) {
@@ -52,7 +68,9 @@ final class Struct
         return $this->fields[$name]['value'];
     }
 
-    // Get all fields
+    /**
+     * @return array
+     */
     public function getFields(): array
     {
         return $this->fields;
