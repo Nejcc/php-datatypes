@@ -7,7 +7,10 @@ use OutOfBoundsException;
 
 class Dictionary
 {
-    private array $elements;
+    /**
+     * @var array
+     */
+    private array $elements = [];
 
     public function __construct(array $elements = [])
     {
@@ -21,13 +24,22 @@ class Dictionary
         $this->elements = $elements;
     }
 
-    // Add a key-value pair to the dictionary
+
+    /**
+     * @param string $key
+     * @param $value
+     * @return void
+     */
     public function add(string $key, $value): void
     {
         $this->elements[$key] = $value;
     }
 
-    // Get the value associated with a key
+
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function get(string $key)
     {
         if (!isset($this->elements[$key])) {
@@ -37,7 +49,11 @@ class Dictionary
         return $this->elements[$key];
     }
 
-    // Remove a key-value pair by the key
+
+    /**
+     * @param string $key
+     * @return void
+     */
     public function remove(string $key): void
     {
         if (!isset($this->elements[$key])) {
@@ -47,31 +63,45 @@ class Dictionary
         unset($this->elements[$key]);
     }
 
-    // Check if a key exists in the dictionary
+    /**
+     * @param string $key
+     * @return bool
+     */
     public function containsKey(string $key): bool
     {
         return array_key_exists($key, $this->elements);
     }
 
-    // Get all keys in the dictionary
+
+    /**
+     * @return array
+     */
     public function getKeys(): array
     {
         return array_keys($this->elements);
     }
 
-    // Get all values in the dictionary
+
+    /**
+     * @return array
+     */
     public function getValues(): array
     {
         return array_values($this->elements);
     }
 
-    // Get the size of the dictionary
+    /**
+     * @return int
+     */
     public function size(): int
     {
         return count($this->elements);
     }
 
-    // Clear the dictionary
+
+    /**
+     * @return void
+     */
     public function clear(): void
     {
         $this->elements = [];

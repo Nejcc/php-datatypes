@@ -55,17 +55,6 @@ function uint32(int $value): UInt32
     return new UInt32($value);
 }
 
-//
-//function uint64(int $value): Int64
-//{
-//    return new UInt64($value);
-//}
-//
-//function uint128(int $value): Int128
-//{
-//    return new UInt128($value);
-//}
-
 function float32(float $value): Float32
 {
     return new Float32($value);
