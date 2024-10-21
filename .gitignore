@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 vendor
 vendor/
+composer.lock
