@@ -39,19 +39,19 @@ final class TestExamples
         // Scalar Types
         $this->account_balance = float32(1234.56);
         $this->investment_amount = float64(78910.12345);
-        $this->grade = new Char('A');
-        $this->age = new Byte(25);
+        $this->grade = char('A');
+        $this->age = byte(25);
 
         // Composite Types (Arrays)
-        $this->names = new StringArray(['John', 'Jane', 'Doe']);
-        $this->scores = new IntArray([100, 95, 87]);
-        $this->weights = new FloatArray([60.5, 72.3, 88.9]);
-        $this->data = new ByteSlice([255, 128, 0]);
+        $this->names = stringArray(['John', 'Jane', 'Doe']);
+        $this->scores = intArray([100, 95, 87]);
+        $this->weights = floatArray([60.5, 72.3, 88.9]);
+        $this->data = byteSlice([255, 128, 0]);
 
-        $this->listData = new ListData(['apple', 'banana', 'orange']);
-        $this->dictionary = new Dictionary(['name' => 'Nejc', 'age' => 99, 'country' => 'Slovenia']);
+        $this->listData = listData(['apple', 'banana', 'orange']);
+        $this->dictionary = dictionary(['name' => 'Nejc', 'age' => 99, 'country' => 'Slovenia']);
 
-        $this->struct = new Struct([
+        $this->struct =struct([
             'name'    => 'string',
             'age'     => 'int',
             'balance' => 'float'

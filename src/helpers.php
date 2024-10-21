@@ -1,9 +1,15 @@
 <?php
 declare(strict_types=1);
 
-use Nejcc\PhpDatatypes\Floats\Float128;
-use Nejcc\PhpDatatypes\Floats\Float16;
-use Nejcc\PhpDatatypes\Floats\Float8;
+use Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice;
+use Nejcc\PhpDatatypes\Composite\Arrays\FloatArray;
+use Nejcc\PhpDatatypes\Composite\Arrays\IntArray;
+use Nejcc\PhpDatatypes\Composite\Arrays\StringArray;
+use Nejcc\PhpDatatypes\Composite\Dictionary;
+use Nejcc\PhpDatatypes\Composite\ListData;
+use Nejcc\PhpDatatypes\Composite\Struct\Struct;
+use Nejcc\PhpDatatypes\Scalar\Byte;
+use Nejcc\PhpDatatypes\Scalar\Char;
 use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32;
 use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64;
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int128;
@@ -75,3 +81,49 @@ function float64(float $value): Float64
 {
     return new Float64($value);
 }
+
+function char(string $value): Char
+{
+    return new Char($value);
+}
+
+function byte(string|int $value): Byte
+{
+    return new Byte($value);
+}
+
+function stringArray(array $value): StringArray
+{
+    return new StringArray($value);
+}
+
+function intArray(array $value): IntArray
+{
+    return new IntArray($value);
+}
+
+function floatArray(array $value): FloatArray
+{
+    return new FloatArray($value);
+}
+
+function byteSlice(array $value): ByteSlice
+{
+    return new ByteSlice($value);
+}
+
+function listData(array $value): ListData
+{
+    return new ListData($value);
+}
+
+function dictionary(array $value): Dictionary
+{
+    return new Dictionary($value);
+}
+
+function struct(array $fields): Struct
+{
+    return new Struct($fields);
+}
+
