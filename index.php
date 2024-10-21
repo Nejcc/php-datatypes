@@ -172,13 +172,13 @@ final class TestExamples
          */
         $this->struct = struct([
             'name'    => 'string',
-            'age'     => 'int',
+            'age'     => '?int',
             'balance' => 'float'
         ]);
 
         // Set initial values for struct fields.
         $this->struct->set('name', 'Nejc');
-        $this->struct->set('age', 30);
+        $this->struct->set('age', null);
         $this->struct->set('balance', 250.75);
     }
 
