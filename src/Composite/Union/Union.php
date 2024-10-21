@@ -6,28 +6,46 @@ use InvalidArgumentException;
 
 final class Union
 {
+    /**
+     * @var mixed
+     */
     private mixed $value;
+
+    /**
+     * @var array
+     */
     private array $allowedTypes;
 
+    /**
+     * @param array $allowedTypes
+     */
     public function __construct(array $allowedTypes)
     {
         $this->allowedTypes = $allowedTypes;
     }
 
-    // Set a value of one of the allowed types
+    /**
+     * @param mixed $value
+     * @return void
+     */
     public function setValue(mixed $value): void
     {
         $this->validateType($value);
         $this->value = $value;
     }
 
-    // Get the value
+    /**
+     * @return mixed
+     */
     public function getValue(): mixed
     {
         return $this->value;
     }
 
-    // Validate that the value matches one of the allowed types
+    /**
+     * @param mixed $value
+     * @return void
+     */
     private function validateType(mixed $value): void
     {
         $type = gettype($value);

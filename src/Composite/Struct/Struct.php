@@ -9,6 +9,7 @@ use InvalidArgumentException;
 final class Struct
 {
     /**
+
      * @var string
      */
     public string $name;
@@ -35,6 +36,7 @@ final class Struct
     }
 
     /**
+
      * Add a new field to the struct.
      *
      * Adds a field to the struct with its specified type and initializes it with a null value.
@@ -111,11 +113,13 @@ final class Struct
     }
 
     /**
+
      * Get all fields in the struct.
      *
      * Returns the entire set of fields in the struct along with their types and values.
      *
      * @return array<string, array{type: string, value: mixed}> The fields with their respective types and values.
+
      */
     public function getFields(): array
     {
