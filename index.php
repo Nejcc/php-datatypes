@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice;
 use Nejcc\PhpDatatypes\Composite\Arrays\FloatArray;
 use Nejcc\PhpDatatypes\Composite\Arrays\IntArray;
@@ -32,133 +34,163 @@ final class TestExamples
     private Dictionary $dictionary;
     private Struct $struct;
 
+    /**
+     * Create a new TestExamples instance.
+     * This constructor initializes all data fields by calling setup methods.
+     * Each field represents different data types for practical examples.
+     *
+     * @return void
+     */
     public function __construct()
     {
+        $this->initScalarTypes();
+        $this->initCompositeTypes();
+        $this->initStruct();
+    }
+
+    /**
+     * Initialize scalar data types.
+     * Scalar types represent individual values like numbers, bytes, and characters.
+     * They are used to handle simple and atomic values within the system.
+     *
+     * @return void
+     */
+    private function initScalarTypes(): void
+    {
+        /**
+         * 8-bit signed integer
+         * Represents the number of years, restricted to small values.
+         * Useful for handling small numeric ranges.
+         */
         $this->years = int8(33);
+
+        /**
+         * 32-bit unsigned integer
+         * Holds large positive numbers like account numbers.
+         * Commonly used in systems where IDs need strict type enforcement.
+         */
         $this->account_number = uint32(343233);
-        // Scalar Types
+
+        /**
+         * 32-bit floating-point number
+         * Stores monetary values with less precision.
+         * Suitable for balances that don't require high precision.
+         */
         $this->account_balance = float32(1234.56);
+
+        /**
+         * 64-bit floating-point number
+         * High-precision number used for large financial figures like investments.
+         * Ensures accurate representation of complex decimals.
+         */
         $this->investment_amount = float64(78910.12345);
-        $this->grade = new Char('A');
-        $this->age = new Byte(25);
 
-        // Composite Types (Arrays)
-        $this->names = new StringArray(['John', 'Jane', 'Doe']);
-        $this->scores = new IntArray([100, 95, 87]);
-        $this->weights = new FloatArray([60.5, 72.3, 88.9]);
-        $this->data = new ByteSlice([255, 128, 0]);
+        /**
+         * Single character type
+         * Holds a grade or other single character values.
+         * Useful in cases where just one symbol needs storage.
+         */
+        $this->grade = char('A');
 
-        $this->listData = new ListData(['apple', 'banana', 'orange']);
-        $this->dictionary = new Dictionary(['name' => 'Nejc', 'age' => 99, 'country' => 'Slovenia']);
+        /**
+         * Byte (unsigned 8-bit integer)
+         * Represents an age or other small number in a compact form.
+         * Often used in systems with limited memory or for byte operations.
+         */
+        $this->age = byte(25);
+    }
 
-        $this->struct = new Struct([
+    /**
+     * Initialize composite data types (arrays, lists, dictionaries).
+     * Composite types represent collections of multiple elements.
+     * They are used to store structured or related data, like names or scores.
+     *
+     * @return void
+     */
+    private function initCompositeTypes(): void
+    {
+        /**
+         * Array of strings
+         * Stores multiple names, useful for handling collections of textual data.
+         * Commonly used to represent names in contact lists or similar collections.
+         */
+        $this->names = stringArray(['John', 'Jane', 'Doe']);
+
+        /**
+         * Array of integers
+         * Holds multiple scores, useful for exam or performance evaluations.
+         * Ensures all elements in the array are integers.
+         */
+        $this->scores = intArray([100, 95, 87]);
+
+        /**
+         * Array of floats
+         * Contains floating-point values like weights.
+         * Useful in systems that require collections of decimal numbers.
+         */
+        $this->weights = floatArray([60.5, 72.3, 88.9]);
+
+        /**
+         * Byte array
+         * Holds a sequence of raw bytes.
+         * Often used for storing binary data, such as file contents or encoded data.
+         */
+        $this->data = byteSlice([255, 128, 0]);
+
+        /**
+         * List of strings
+         * Stores elements like fruit names, representing simple ordered collections.
+         * Useful for maintaining ordered lists in a system.
+         */
+        $this->listData = listData(['apple', 'banana', 'orange']);
+
+        /**
+         * Dictionary with key-value pairs
+         * Stores user information like name, age, and country.
+         * Used when you need to access data by keys rather than indexes.
+         */
+        $this->dictionary = dictionary([
+            'name'    => 'Nejc',
+            'age'     => 99,
+            'country' => 'Slovenia'
+        ]);
+    }
+
+    /**
+     * Initialize structured data types (Struct).
+     * Structs allow for grouping data into named fields with specific types.
+     * They are useful for representing records or objects with fixed attributes.
+     *
+     * @return void
+     */
+    private function initStruct(): void
+    {
+        /**
+         * Struct definition with named fields
+         * Used to group related fields into a single entity (e.g., a user profile).
+         * Each field has a specific type, ensuring type-safety across attributes.
+         */
+        $this->struct = struct([
             'name'    => 'string',
             'age'     => 'int',
             'balance' => 'float'
         ]);
 
-        // Setting field values
+        // Set initial values for struct fields.
         $this->struct->set('name', 'Nejc');
         $this->struct->set('age', 30);
         $this->struct->set('balance', 250.75);
-
-
     }
 
+    /**
+     * Retrieve all example data as an array.
+     * This method returns the initialized scalar, composite, and structured data.
+     * Can be used to display or process the data in various parts of the system.
+     *
+     * @return array
+     */
     public function getExamples(): array
     {
-        /*
-         * Test only
-
-array (size=14)
-  'years' =>
-    object(Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8)[4]
-      protected readonly int 'value' => int 33
-  'account_number' =>
-    object(Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32)[5]
-      protected readonly int 'value' => int 343233
-  'account_balance' =>
-    object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float32)[6]
-      protected readonly float 'value' => float 1234.56
-  'investment_amount' =>
-    object(Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64)[7]
-      protected readonly float 'value' => float 78910.12345
-  'grade' =>
-    object(Nejcc\PhpDatatypes\Scalar\Char)[8]
-      private string 'value' => string 'A' (length=1)
-  'age' =>
-    object(Nejcc\PhpDatatypes\Scalar\Byte)[9]
-      private int 'value' => int 25
-  'names' =>
-    object(Nejcc\PhpDatatypes\Composite\Arrays\StringArray)[10]
-      private array 'value' =>
-        array (size=3)
-          0 => string 'John' (length=4)
-          1 => string 'Jane' (length=4)
-          2 => string 'Doe' (length=3)
-  'scores' =>
-    object(Nejcc\PhpDatatypes\Composite\Arrays\IntArray)[11]
-      private array 'value' =>
-        array (size=3)
-          0 => int 100
-          1 => int 95
-          2 => int 87
-  'weights' =>
-    object(Nejcc\PhpDatatypes\Composite\Arrays\FloatArray)[12]
-      private array 'value' =>
-        array (size=3)
-          0 => float 60.5
-          1 => float 72.3
-          2 => float 88.9
-  'data' =>
-    object(Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice)[13]
-      private array 'value' =>
-        array (size=3)
-          0 => int 255
-          1 => int 128
-          2 => int 0
-  'listData' =>
-    object(Nejcc\PhpDatatypes\Composite\ListData)[14]
-      private array 'elements' =>
-        array (size=3)
-          0 => string 'apple' (length=5)
-          1 => string 'banana' (length=6)
-          2 => string 'orange' (length=6)
-  'dictionary' =>
-    object(Nejcc\PhpDatatypes\Composite\Dictionary)[15]
-      private array 'elements' =>
-        array (size=3)
-          'name' => string 'Nejc' (length=4)
-          'age' => int 99
-          'country' => string 'Slovenia' (length=8)
-  'struct' =>
-    object(Nejcc\PhpDatatypes\Composite\Struct\Struct)[16]
-      private array 'fields' =>
-        array (size=3)
-          'name' =>
-            array (size=2)
-              ...
-          'age' =>
-            array (size=2)
-              ...
-          'balance' =>
-            array (size=2)
-              ...
-  'struct_all' =>
-    array (size=3)
-      'name' =>
-        array (size=2)
-          'type' => string 'string' (length=6)
-          'value' => string 'Nejc' (length=4)
-      'age' =>
-        array (size=2)
-          'type' => string 'int' (length=3)
-          'value' => int 30
-      'balance' =>
-        array (size=2)
-          'type' => string 'float' (length=5)
-          'value' => float 250.75
-         */
         return [
             'years'             => $this->years,
             'account_number'    => $this->account_number,
@@ -173,11 +205,14 @@ array (size=14)
             'listData'          => $this->listData,
             'dictionary'        => $this->dictionary,
             'struct'            => $this->struct,
-            'struct_all'        => $this->struct->getFields(),
+            'struct_all'        => $this->struct->getFields(), // All fields in the struct
         ];
     }
 }
 
 // Instantiate the class and invoke the examples
 $example = new TestExamples();
+
+// Display the example data
 var_dump($example->getExamples());
+
