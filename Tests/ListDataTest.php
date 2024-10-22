@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Nejcc\PhpDatatypes\Tests;
 
 use Nejcc\PhpDatatypes\Composite\ListData;
+use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 class ListDataTest extends TestCase
 {
