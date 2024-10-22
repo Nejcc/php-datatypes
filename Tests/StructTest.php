@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
+namespace Nejcc\PhpDatatypes\Tests;
+
+use InvalidArgumentException;
 use Nejcc\PhpDatatypes\Composite\Struct\Struct;
 use PHPUnit\Framework\TestCase;
 
