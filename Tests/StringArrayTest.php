@@ -3,111 +3,145 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
 
-use InvalidArgumentException;
 use Nejcc\PhpDatatypes\Composite\Arrays\StringArray;
+use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
 use PHPUnit\Framework\TestCase;
-use TypeError;
 
 class StringArrayTest extends TestCase
 {
-    /**
-     * Test that the constructor throws an exception if any element is not a string.
-     */
-    public function testConstructorThrowsExceptionForInvalidType()
+    public function testCreateValidStringArray(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        new StringArray(['validString', 123]); // Invalid, second element is an integer
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+        $this->assertEquals(['apple', 'banana', 'cherry'], $array->getValue());
     }
 
-    /**
-     * Test that the constructor correctly assigns the array of strings.
-     */
-    public function testConstructorAssignsValidValue()
+    public function testInvalidStringArrayThrowsException(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $this->assertEquals(['string1', 'string2'], $stringArray->getValue());
+        $this->expectException(InvalidStringException::class);
+        new StringArray(['apple', 123, 'cherry']); // Integer value should throw an exception
     }
 
-    /**
-     * Test that adding a valid string works.
-     */
-    public function testAddString()
+    public function testAddStringToNewInstance(): void
     {
-        $stringArray = new StringArray(['string1']);
-        $stringArray->add('string2');
-        $this->assertEquals(['string1', 'string2'], $stringArray->getValue());
+        $array = new StringArray(['apple', 'banana']);
+        $newArray = $array->add('cherry');
+
+        $this->assertNotSame($array, $newArray); // Ensure immutability
+        $this->assertEquals(['apple', 'banana'], $array->getValue());
+        $this->assertEquals(['apple', 'banana', 'cherry'], $newArray->getValue());
     }
 
-    /**
-     * Test that adding a non-string value throws a TypeError.
-     */
-    public function testAddNonStringThrowsException()
+    public function testRemoveStringFromArray(): void
     {
-        $stringArray = new StringArray(['string1']);
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+        $newArray = $array->remove('banana');
 
-        $this->expectException(TypeError::class);  // Expect TypeError instead of InvalidArgumentException
-        $stringArray->add(123); // Invalid, not a string
+        $this->assertNotSame($array, $newArray); // Ensure immutability
+        $this->assertEquals(['apple', 'banana', 'cherry'], $array->getValue());
+        $this->assertEquals(['apple', 'cherry'], $newArray->getValue());
     }
 
-    /**
-     * Test that removing an existing string works.
-     */
-    public function testRemoveString()
+    public function testRemoveNonExistentStringDoesNothing(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $removed = $stringArray->remove('string1');
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+        $newArray = $array->remove('pear');
 
-        $this->assertTrue($removed);
-        $this->assertEquals(['string2'], $stringArray->getValue());
+        // Check that the values are still the same (immutability)
+        $this->assertEquals($array->getValue(), $newArray->getValue());
     }
 
-    /**
-     * Test that removing a non-existing string returns false.
-     */
-    public function testRemoveNonExistingString()
-    {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $removed = $stringArray->remove('string3');
 
-        $this->assertFalse($removed);
-        $this->assertEquals(['string1', 'string2'], $stringArray->getValue());
+    public function testContains(): void
+    {
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+
+        $this->assertTrue($array->contains('banana'));
+        $this->assertFalse($array->contains('pear'));
     }
 
-    /**
-     * Test that contains() works correctly.
-     */
-    public function testContainsString()
+    public function testCountStrings(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $this->assertTrue($stringArray->contains('string1'));
-        $this->assertFalse($stringArray->contains('string3'));
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+        $this->assertEquals(3, $array->count());
     }
 
-    /**
-     * Test that count() returns the correct number of elements.
-     */
-    public function testCountStrings()
+    public function testToString(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $this->assertEquals(2, $stringArray->count());
+        $array = new StringArray(['apple', 'banana', 'cherry']);
+        $this->assertEquals('apple, banana, cherry', $array->toString());
+        $this->assertEquals('apple|banana|cherry', $array->toString('|'));
     }
 
-    /**
-     * Test that toString() returns the correct comma-separated string.
-     */
-    public function testToString()
+    public function testFilterByPrefix(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $this->assertEquals('string1, string2', $stringArray->toString());
+        $array = new StringArray(['apple', 'banana', 'apricot']);
+        $filtered = $array->filterByPrefix('ap');
+
+        $this->assertEquals(['apple', 'apricot'], $filtered);
     }
 
-    /**
-     * Test that clear() empties the array.
-     */
-    public function testClearArray()
+    public function testFilterBySubstring(): void
     {
-        $stringArray = new StringArray(['string1', 'string2']);
-        $stringArray->clear();
-        $this->assertEquals([], $stringArray->getValue());
+        $array = new StringArray(['apple', 'banana', 'pineapple']);
+        $filtered = $array->filterBySubstring('apple');
+
+        $this->assertEquals(['apple', 'pineapple'], $filtered);
+    }
+
+    public function testToUpperCase(): void
+    {
+        $array = new StringArray(['apple', 'banana']);
+        $newArray = $array->toUpperCase();
+
+        $this->assertNotSame($array, $newArray); // Ensure immutability
+        $this->assertEquals(['APPLE', 'BANANA'], $newArray->getValue());
+    }
+
+    public function testToLowerCase(): void
+    {
+        $array = new StringArray(['APPLE', 'BANANA']);
+        $newArray = $array->toLowerCase();
+
+        $this->assertNotSame($array, $newArray); // Ensure immutability
+        $this->assertEquals(['apple', 'banana'], $newArray->getValue());
+    }
+
+    public function testClearArray(): void
+    {
+        $array = new StringArray(['apple', 'banana']);
+        $clearedArray = $array->clear();
+
+        $this->assertNotSame($array, $clearedArray); // Ensure immutability
+        $this->assertEquals([], $clearedArray->getValue());
+    }
+
+    public function testArrayAccess(): void
+    {
+        $array = new StringArray(['apple', 'banana']);
+        $this->assertEquals('apple', $array[0]);
+        $this->assertEquals('banana', $array[1]);
+        $this->assertNull($array[2]); // Non-existent index
+    }
+
+    public function testOffsetSetThrowsException(): void
+    {
+        $this->expectException(InvalidStringException::class);
+        $array = new StringArray(['apple', 'banana']);
+        $array[0] = 'orange'; // Should throw an exception
+    }
+
+    public function testOffsetUnsetThrowsException(): void
+    {
+        $this->expectException(InvalidStringException::class);
+        $array = new StringArray(['apple', 'banana']);
+        unset($array[0]); // Should throw an exception
+    }
+
+    public function testIterator(): void
+    {
+        $array = new StringArray(['apple', 'banana']);
+        foreach ($array as $key => $value) {
+            $this->assertEquals($array->get($key), $value);
+        }
     }
 }
