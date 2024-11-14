@@ -11,7 +11,7 @@
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
 
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
+
 
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=Nejcc_php-datatypes&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=Nejcc_php-datatypes)
 
