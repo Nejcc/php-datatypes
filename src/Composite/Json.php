@@ -8,13 +8,13 @@ use InvalidArgumentException;
 use JsonException;
 use Nejcc\PhpDatatypes\Interfaces\DecoderInterface;
 use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
-
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 
 /**
  * Class Json
  * A strict and immutable type for handling JSON data with advanced features.
  */
-final class Json
+final class Json extends ArrayAbstraction
 {
     /**
      * @var string The JSON string.
@@ -43,23 +43,8 @@ final class Json
         $this->validateJson($json);
         $this->schema = $schema;
         $this->json = $json;
+        parent::__construct([]); // Not used, but required by ArrayAbstraction
     }
-
-    /**
-     * Validates if a string is valid JSON.
-     *
-     * @param string $json
-     * @throws InvalidArgumentException
-     */
-    private function validateJson(string $json): void
-    {
-        try {
-            json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new InvalidArgumentException('Invalid JSON provided: ' . $e->getMessage());
-        }
-    }
-
 
     /**
      * Serializes the JSON data to an array.
