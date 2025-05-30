@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Abstract;
@@ -15,6 +16,7 @@ abstract class AbstractChar
 
     /**
      * @param string $value
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct(string $value)
@@ -25,71 +27,71 @@ abstract class AbstractChar
         $this->value = $value;
     }
 
-    public function getValue(): string
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function toUpperCase(): static
+    final public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    final public function toUpperCase(): static
     {
         return new static(strtoupper($this->value));
     }
 
-    public function toLowerCase(): static
+    final public function toLowerCase(): static
     {
         return new static(strtolower($this->value));
     }
 
-    public function isLetter(): bool
+    final public function isLetter(): bool
     {
         return ctype_alpha($this->value);
     }
 
-    public function isDigit(): bool
+    final public function isDigit(): bool
     {
         return ctype_digit($this->value);
     }
 
-    public function isUpperCase(): bool
+    final public function isUpperCase(): bool
     {
         return ctype_upper($this->value);
     }
 
-    public function isLowerCase(): bool
+    final public function isLowerCase(): bool
     {
         return ctype_lower($this->value);
     }
 
-    public function isWhitespace(): bool
+    final public function isWhitespace(): bool
     {
         return ctype_space($this->value);
     }
 
-    public function getNumericValue(): int
+    final public function getNumericValue(): int
     {
         return $this->isDigit() ? (int)$this->value : -1;
     }
 
-    public function equals(self $char): bool
+    final public function equals(self $char): bool
     {
         return $this->value === $char->getValue();
     }
 
-    public function toAscii(): int
+    final public function toAscii(): int
     {
         return ord($this->value);
     }
 
-    public static function fromAscii(int $ascii): static
+    final public static function fromAscii(int $ascii): static
     {
         if ($ascii < 0 || $ascii > 255) {
             throw new \InvalidArgumentException('ASCII value must be between 0 and 255.');
         }
         return new static(chr($ascii));
     }
-
-    public function __toString(): string
-    {
-        return $this->value;
-    }
-} 
+}

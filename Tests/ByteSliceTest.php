@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
@@ -7,7 +8,7 @@ use Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice;
 use Nejcc\PhpDatatypes\Exceptions\InvalidByteException;
 use PHPUnit\Framework\TestCase;
 
-class ByteSliceTest extends TestCase
+final class ByteSliceTest extends TestCase
 {
     /**
      * Test creating a valid ByteSlice instance.
@@ -128,4 +129,3 @@ class ByteSliceTest extends TestCase
         $this->assertCount(0, $byteSlice);
     }
 }
-

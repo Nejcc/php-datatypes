@@ -1,16 +1,16 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Arrays;
 
-use Countable;
 use ArrayAccess;
+use Countable;
 use IteratorAggregate;
-use Traversable;
-use Nejcc\PhpDatatypes\Exceptions\InvalidByteException;
 use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
+use Nejcc\PhpDatatypes\Exceptions\InvalidByteException;
 
-class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
+final class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var array<int> The byte values (0-255).
@@ -21,6 +21,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * Constructor for ByteSlice.
      *
      * @param array<int> $value The array of byte values.
+     *
      * @throws InvalidByteException If any value is not a valid byte.
      */
     public function __construct(array $value)
@@ -43,6 +44,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * Get the byte at a specific index.
      *
      * @param int $index The index.
+     *
      * @return int|null The byte value or null if index is out of bounds.
      */
     public function getByte(int $index): ?int
@@ -67,7 +69,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      */
     public function toHex(): string
     {
-        return implode('', array_map(fn($byte) => sprintf('%02X', $byte), $this->value));
+        return implode('', array_map(fn ($byte) => sprintf('%02X', $byte), $this->value));
     }
 
     /**
@@ -75,7 +77,9 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      *
      * @param int $offset The start offset.
      * @param int|null $length The length of the slice.
+     *
      * @return ByteSlice The sliced byte array.
+     *
      * @throws InvalidByteException
      */
     public function slice(int $offset, ?int $length = null): self
@@ -87,7 +91,9 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * Merge the current byte array with another byte array.
      *
      * @param ByteSlice $other The other byte array to merge.
+     *
      * @return ByteSlice A new ByteSlice instance containing the merged bytes.
+     *
      * @throws InvalidByteException
      */
     public function merge(ByteSlice $other): self
@@ -99,6 +105,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * ArrayAccess: Check if a byte exists at the given offset.
      *
      * @param int $offset The array offset.
+     *
      * @return bool True if offset exists, false otherwise.
      */
     public function offsetExists(mixed $offset): bool
@@ -110,6 +117,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * ArrayAccess: Get the byte at the given offset.
      *
      * @param int $offset The array offset.
+     *
      * @return mixed The byte value at the given offset.
      */
     public function offsetGet(mixed $offset): mixed
@@ -122,6 +130,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      *
      * @param int $offset The array offset.
      * @param mixed $value The value to set (not allowed).
+     *
      * @throws InvalidByteException Always thrown since ByteSlice is immutable.
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -133,6 +142,7 @@ class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, Iter
      * ArrayAccess: Prevent unsetting by throwing an exception.
      *
      * @param int $offset The array offset.
+     *
      * @throws InvalidByteException Always thrown since ByteSlice is immutable.
      */
     public function offsetUnset(mixed $offset): void

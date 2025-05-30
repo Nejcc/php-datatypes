@@ -6,7 +6,6 @@ namespace Nejcc\PhpDatatypes\Scalar\Integers\Unsigned;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractNativeInteger;
 
-
 /**
  * Represents an 8-bit unsigned integer.
  *

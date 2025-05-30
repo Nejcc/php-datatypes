@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Arrays;
 use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 use Nejcc\PhpDatatypes\Exceptions\InvalidFloatException;
 
-class FloatArray extends ArrayAbstraction implements \ArrayAccess
+final class FloatArray extends ArrayAbstraction implements \ArrayAccess
 {
     public function __construct(array $value)
     {

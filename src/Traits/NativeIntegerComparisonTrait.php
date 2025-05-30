@@ -10,6 +10,7 @@ trait NativeIntegerComparisonTrait
 {
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return bool
      */
     public function equals(NativeIntegerInterface $other): bool
@@ -19,6 +20,7 @@ trait NativeIntegerComparisonTrait
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return bool
      */
     public function isGreaterThan(NativeIntegerInterface $other): bool
@@ -28,6 +30,7 @@ trait NativeIntegerComparisonTrait
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return bool
      */
     public function isLessThan(NativeIntegerInterface $other): bool

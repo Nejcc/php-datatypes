@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
 
-
 use Nejcc\PhpDatatypes\Scalar\FloatingPoints\Float64;
 use PHPUnit\Framework\TestCase;
 

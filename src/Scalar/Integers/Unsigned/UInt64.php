@@ -53,12 +53,12 @@ final class UInt64 extends AbstractBigInteger
      */
     public const MAX_VALUE = '18446744073709551615';
 
-    public function getValue(): string
+    public function __toString(): string
     {
         return $this->value;
     }
 
-    public function __toString(): string
+    public function getValue(): string
     {
         return $this->value;
     }

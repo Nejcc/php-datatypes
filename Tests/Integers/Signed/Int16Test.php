@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Signed;
 
-
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int16;
 use PHPUnit\Framework\TestCase;
 
-class Int16Test extends TestCase
+final class Int16Test extends TestCase
 {
     public function testValidInitialization()
     {

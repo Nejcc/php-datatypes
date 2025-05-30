@@ -6,8 +6,8 @@ namespace Nejcc\PhpDatatypes\Abstract;
 
 use Nejcc\PhpDatatypes\Interfaces\BigIntegerInterface;
 use Nejcc\PhpDatatypes\Interfaces\NativeIntegerInterface;
-use Nejcc\PhpDatatypes\Traits\ArithmeticOperationsTrait;
-use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
+use Nejcc\PhpDatatypes\Traits\BigArithmeticOperationsTrait;
+use Nejcc\PhpDatatypes\Traits\BigIntegerComparisonTrait;
 
 /**
  * Abstract class for big integer types using arbitrary-precision arithmetic.
@@ -16,16 +16,16 @@ use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
  */
 abstract class AbstractBigInteger implements BigIntegerInterface
 {
-    use ArithmeticOperationsTrait;
-    use IntegerComparisonTrait;
+    use BigArithmeticOperationsTrait;
+    use BigIntegerComparisonTrait;
+
+    public const MIN_VALUE = null;
+    public const MAX_VALUE = null;
 
     /**
      * @var string
      */
     protected readonly string $value;
-
-    public const MIN_VALUE = null;
-    public const MAX_VALUE = null;
 
     /**
      * @param int|string $value
@@ -35,8 +35,32 @@ abstract class AbstractBigInteger implements BigIntegerInterface
         $this->setValue($value);
     }
 
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue(): string
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param NativeIntegerInterface|BigIntegerInterface $other
+     *
+     * @return int
+     */
+    final public function compare(NativeIntegerInterface|BigIntegerInterface $other): int
+    {
+        return bccomp($this->value, (string)$other->getValue());
+    }
+
     /**
      * @param int|string $value
+     *
      * @return void
      */
     protected function setValue(int|string $value): void
@@ -54,28 +78,12 @@ abstract class AbstractBigInteger implements BigIntegerInterface
         $this->value = $valueStr;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param NativeIntegerInterface|BigIntegerInterface $other
-     * @return int
-     */
-    public function compare(NativeIntegerInterface|BigIntegerInterface $other): int
-    {
-        return bccomp($this->value, (string)$other->getValue());
-    }
-
 
     /**
      * @param BigIntegerInterface|NativeIntegerInterface $other
      * @param callable $operation
      * @param string $operationName
+     *
      * @return $this
      */
     protected function performOperation(
@@ -96,6 +104,7 @@ abstract class AbstractBigInteger implements BigIntegerInterface
     /**
      * @param string $a
      * @param string $b
+     *
      * @return string
      */
     protected function addValues(string $a, string $b): string
@@ -106,6 +115,7 @@ abstract class AbstractBigInteger implements BigIntegerInterface
     /**
      * @param string $a
      * @param string $b
+     *
      * @return string
      */
     protected function subtractValues(string $a, string $b): string
@@ -116,6 +126,7 @@ abstract class AbstractBigInteger implements BigIntegerInterface
     /**
      * @param string $a
      * @param string $b
+     *
      * @return string
      */
     protected function multiplyValues(string $a, string $b): string
@@ -126,6 +137,7 @@ abstract class AbstractBigInteger implements BigIntegerInterface
     /**
      * @param string $a
      * @param string $b
+     *
      * @return string
      */
     protected function divideValues(string $a, string $b): string
@@ -134,18 +146,19 @@ abstract class AbstractBigInteger implements BigIntegerInterface
             throw new \DivisionByZeroError('Division by zero.');
         }
 
-        $result = bcdiv($a, $b, 0);
-
-        if (str_contains($result, '.')) {
+        // Check if $a is evenly divisible by $b
+        $mod = bcmod($a, $b);
+        if ($mod !== '0') {
             throw new \UnexpectedValueException('Division result is not an integer.');
         }
 
-        return $result;
+        return bcdiv($a, $b, 0);
     }
 
     /**
      * @param string $a
      * @param string $b
+     *
      * @return string
      */
     protected function modValues(string $a, string $b): string

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Nejcc\PhpDatatypes\Composite\Arrays\ByteSlice;
@@ -24,6 +25,7 @@ use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 if (!function_exists('int8')) {
     /**
      * @param int $value
+     *
      * @return Int8
      */
     function int8(int $value): Int8
@@ -35,6 +37,7 @@ if (!function_exists('int8')) {
 if (!function_exists('int16')) {
     /**
      * @param int $value
+     *
      * @return Int16
      */
     function int16(int $value): Int16
@@ -46,6 +49,7 @@ if (!function_exists('int16')) {
 if (!function_exists('int32')) {
     /**
      * @param int $value
+     *
      * @return Int32
      */
     function int32(int $value): Int32
@@ -57,6 +61,7 @@ if (!function_exists('int32')) {
 if (!function_exists('int64')) {
     /**
      * @param int $value
+     *
      * @return Int64
      */
     function int64(int $value): Int64
@@ -68,6 +73,7 @@ if (!function_exists('int64')) {
 if (!function_exists('int128')) {
     /**
      * @param int $value
+     *
      * @return Int128
      */
     function int128(int $value): Int128
@@ -79,6 +85,7 @@ if (!function_exists('int128')) {
 if (!function_exists('uint8')) {
     /**
      * @param int $value
+     *
      * @return UInt8
      */
     function uint8(int $value): UInt8
@@ -90,6 +97,7 @@ if (!function_exists('uint8')) {
 if (!function_exists('uint16')) {
     /**
      * @param int $value
+     *
      * @return UInt16
      */
     function uint16(int $value): UInt16
@@ -101,6 +109,7 @@ if (!function_exists('uint16')) {
 if (!function_exists('uint32')) {
     /**
      * @param int $value
+     *
      * @return UInt32
      */
     function uint32(int $value): UInt32
@@ -112,6 +121,7 @@ if (!function_exists('uint32')) {
 if (!function_exists('float32')) {
     /**
      * @param float $value
+     *
      * @return Float32
      */
     function float32(float $value): Float32
@@ -123,6 +133,7 @@ if (!function_exists('float32')) {
 if (!function_exists('float64')) {
     /**
      * @param float $value
+     *
      * @return Float64
      */
     function float64(float $value): Float64

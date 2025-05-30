@@ -6,9 +6,9 @@ namespace Nejcc\PhpDatatypes\Composite;
 
 use InvalidArgumentException;
 use JsonException;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 use Nejcc\PhpDatatypes\Interfaces\DecoderInterface;
 use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
-use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 
 /**
  * Class Json
@@ -36,6 +36,7 @@ final class Json extends ArrayAbstraction
      *
      * @param string $json The JSON string.
      * @param string|null $schema Optional JSON schema for validation.
+     *
      * @throws InvalidArgumentException If the JSON is invalid or does not comply with the schema.
      */
     public function __construct(string $json, ?string $schema = null)
@@ -50,6 +51,7 @@ final class Json extends ArrayAbstraction
      * Serializes the JSON data to an array.
      *
      * @return array
+     *
      * @throws JsonException
      */
     public function toArray(): array
@@ -65,6 +67,7 @@ final class Json extends ArrayAbstraction
      * Serializes the JSON data to an object.
      *
      * @return object
+     *
      * @throws JsonException
      */
     public function toObject(): object
@@ -77,7 +80,9 @@ final class Json extends ArrayAbstraction
      *
      * @param array $data
      * @param string|null $schema
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      * @throws JsonException
      */
@@ -92,7 +97,9 @@ final class Json extends ArrayAbstraction
      *
      * @param object $object
      * @param string|null $schema
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      * @throws JsonException
      */
@@ -116,6 +123,7 @@ final class Json extends ArrayAbstraction
      * Compresses the JSON string using the provided encoder.
      *
      * @param EncoderInterface $encoder
+     *
      * @return string The compressed string.
      */
     public function compress(EncoderInterface $encoder): string
@@ -128,7 +136,9 @@ final class Json extends ArrayAbstraction
      *
      * @param DecoderInterface $decoder
      * @param string $compressed
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      */
     public static function decompress(DecoderInterface $decoder, string $compressed): self
@@ -142,7 +152,9 @@ final class Json extends ArrayAbstraction
      * In case of conflicting keys, values from the other Json take precedence.
      *
      * @param Json $other
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function merge(Json $other): self
@@ -157,7 +169,9 @@ final class Json extends ArrayAbstraction
      *
      * @param string $key
      * @param mixed $value
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function update(string $key, mixed $value): self
@@ -172,7 +186,9 @@ final class Json extends ArrayAbstraction
      * Removes a key from the JSON data.
      *
      * @param string $key
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function remove(string $key): self

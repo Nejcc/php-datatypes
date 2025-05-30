@@ -10,6 +10,7 @@ trait BigIntegerComparisonTrait
 {
     /**
      * @param BigIntegerInterface $other
+     *
      * @return bool
      */
     public function equals(BigIntegerInterface $other): bool
@@ -19,6 +20,7 @@ trait BigIntegerComparisonTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return bool
      */
     public function isGreaterThan(BigIntegerInterface $other): bool
@@ -28,10 +30,11 @@ trait BigIntegerComparisonTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return bool
      */
     public function isLessThan(BigIntegerInterface $other): bool
     {
         return $this->getValue() < $other->getValue();
     }
-} 
+}

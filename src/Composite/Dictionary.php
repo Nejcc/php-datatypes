@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite;
@@ -6,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite;
 use InvalidArgumentException;
 use OutOfBoundsException;
 
-class Dictionary
+final class Dictionary
 {
     /**
      * The associative array that stores dictionary elements.
@@ -21,7 +22,9 @@ class Dictionary
      * Validates that the initial elements are associative.
      *
      * @param array<string, mixed> $elements
+     *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public function __construct(array $elements = [])
@@ -40,6 +43,7 @@ class Dictionary
      *
      * @param string $key
      * @param mixed $value
+     *
      * @return void
      */
     public function add(string $key, mixed $value): void
@@ -51,7 +55,9 @@ class Dictionary
      * Get the value associated with a key.
      *
      * @param string $key
+     *
      * @throws OutOfBoundsException
+     *
      * @return mixed
      */
     public function get(string $key): mixed
@@ -67,7 +73,9 @@ class Dictionary
      * Remove a key-value pair by the key.
      *
      * @param string $key
+     *
      * @throws OutOfBoundsException
+     *
      * @return void
      */
     public function remove(string $key): void
@@ -83,6 +91,7 @@ class Dictionary
      * Check if a key exists in the dictionary.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function containsKey(string $key): bool

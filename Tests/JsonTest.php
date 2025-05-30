@@ -3,11 +3,11 @@
 declare(strict_types=1);
 
 use Nejcc\PhpDatatypes\Composite\Json;
-use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
 use Nejcc\PhpDatatypes\Interfaces\DecoderInterface;
+use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
 use PHPUnit\Framework\TestCase;
 
-class JsonTest extends TestCase
+final class JsonTest extends TestCase
 {
     public function testValidJsonConstruction(): void
     {
@@ -45,11 +45,17 @@ class JsonTest extends TestCase
     public function testCompressAndDecompress(): void
     {
         $json = new Json('{"a":1}');
-        $encoder = new class implements EncoderInterface {
-            public function encode(string $data): string { return base64_encode($data); }
+        $encoder = new class () implements EncoderInterface {
+            public function encode(string $data): string
+            {
+                return base64_encode($data);
+            }
         };
-        $decoder = new class implements DecoderInterface {
-            public function decode(string $data): string { return base64_decode($data); }
+        $decoder = new class () implements DecoderInterface {
+            public function decode(string $data): string
+            {
+                return base64_decode($data);
+            }
         };
         $compressed = $json->compress($encoder);
         $this->assertSame(base64_encode('{"a":1}'), $compressed);
@@ -79,4 +85,4 @@ class JsonTest extends TestCase
         $this->expectException(JsonException::class);
         Json::fromArray(["bad" => fopen('php://memory', 'r')]);
     }
-} 
+}

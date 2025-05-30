@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Tests\Integers\Unsigned;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 use PHPUnit\Framework\TestCase;
 
-class UInt8Test extends TestCase
+final class UInt8Test extends TestCase
 {
     public function testValidInitialization()
     {

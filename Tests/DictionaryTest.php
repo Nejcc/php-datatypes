@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
@@ -8,7 +9,7 @@ use Nejcc\PhpDatatypes\Composite\Dictionary;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
 
-class DictionaryTest extends TestCase
+final class DictionaryTest extends TestCase
 {
     public function testCanInitializeWithElements()
     {

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
@@ -7,10 +8,11 @@ use Nejcc\PhpDatatypes\Composite\Arrays\FloatArray;
 use Nejcc\PhpDatatypes\Exceptions\InvalidFloatException;
 use PHPUnit\Framework\TestCase;
 
-class FloatArrayTest extends TestCase
+final class FloatArrayTest extends TestCase
 {
     /**
      * Test creating a valid FloatArray instance.
+     *
      * @throws InvalidFloatException
      */
     public function testCreateValidFloatArray(): void
@@ -32,6 +34,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test adding floats to a FloatArray.
+     *
      * @throws InvalidFloatException
      */
     public function testAddFloats(): void
@@ -44,6 +47,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test removing floats from a FloatArray.
+     *
      * @throws InvalidFloatException
      */
     public function testRemoveFloats(): void
@@ -56,6 +60,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test calculating the sum of floats.
+     *
      * @throws InvalidFloatException
      */
     public function testSumOfFloats(): void
@@ -66,6 +71,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test calculating the average of floats.
+     *
      * @throws InvalidFloatException
      */
     public function testAverageOfFloats(): void
@@ -88,6 +94,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test getting the count of floats in a FloatArray.
+     *
      * @throws InvalidFloatException
      */
     public function testGetFloatCount(): void
@@ -98,6 +105,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test ArrayAccess implementation for accessing a float at a specific index.
+     *
      * @throws InvalidFloatException
      */
     public function testArrayAccessGet(): void
@@ -133,6 +141,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test iterating over FloatArray with IteratorAggregate.
+     *
      * @throws InvalidFloatException
      */
     public function testIterationOverFloatArray(): void
@@ -149,6 +158,7 @@ class FloatArrayTest extends TestCase
 
     /**
      * Test creating an empty FloatArray.
+     *
      * @throws InvalidFloatException
      */
     public function testEmptyFloatArray(): void

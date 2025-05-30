@@ -26,23 +26,11 @@ abstract class AbstractString implements StringInterface
     }
 
     /**
-     * Set the string value.
-     *
-     * @param string $value
-     * @return void
-     */
-    protected function setValue(string $value): void
-    {
-        // Perform validations if necessary (e.g., length checks)
-        $this->value = $value;
-    }
-
-    /**
      * Get the string value.
      *
      * @return string
      */
-    public function getValue(): string
+    final public function getValue(): string
     {
         return $this->value;
     }
@@ -51,9 +39,10 @@ abstract class AbstractString implements StringInterface
      * Compare two strings.
      *
      * @param StringInterface $other
+     *
      * @return int
      */
-    public function compare(StringInterface $other): int
+    final public function compare(StringInterface $other): int
     {
         return strcmp($this->value, $other->getValue());
     }
@@ -62,9 +51,10 @@ abstract class AbstractString implements StringInterface
      * Append another string to this one.
      *
      * @param StringInterface $other
+     *
      * @return static
      */
-    public function append(StringInterface $other): static
+    final public function append(StringInterface $other): static
     {
         return new static($this->value . $other->getValue());
     }
@@ -74,9 +64,10 @@ abstract class AbstractString implements StringInterface
      *
      * @param int $start
      * @param int|null $length
+     *
      * @return static
      */
-    public function substring(int $start, ?int $length = null): static
+    final public function substring(int $start, ?int $length = null): static
     {
         return new static(substr($this->value, $start, $length));
     }
@@ -85,9 +76,10 @@ abstract class AbstractString implements StringInterface
      * Check if this string contains another string.
      *
      * @param StringInterface $needle
+     *
      * @return bool
      */
-    public function contains(StringInterface $needle): bool
+    final public function contains(StringInterface $needle): bool
     {
         return str_contains($this->value, $needle->getValue());
     }
@@ -97,8 +89,21 @@ abstract class AbstractString implements StringInterface
      *
      * @return int
      */
-    public function length(): int
+    final public function length(): int
     {
         return strlen($this->value);
+    }
+
+    /**
+     * Set the string value.
+     *
+     * @param string $value
+     *
+     * @return void
+     */
+    protected function setValue(string $value): void
+    {
+        // Perform validations if necessary (e.g., length checks)
+        $this->value = $value;
     }
 }

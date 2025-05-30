@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int16;
+use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 
 /**
@@ -16,13 +18,13 @@ try {
     // Create Int8 instances
     $number1 = new Int8(42);
     $number2 = new Int8(10);
-    
+
     // Arithmetic operations
     $sum = $number1->add($number2);
     $difference = $number1->subtract($number2);
     $product = $number1->multiply($number2);
     $quotient = $number1->divide($number2);
-    
+
     echo "Number 1: " . $number1->getValue() . "\n";
     echo "Number 2: " . $number2->getValue() . "\n";
     echo "Sum: " . $sum->getValue() . "\n";
@@ -82,7 +84,7 @@ try {
     $int8 = new Int8(100);
     $int16 = new Int16(1000);
     $uint8 = new UInt8(200);
-    
+
     echo "Int8 value: " . $int8->getValue() . "\n";
     echo "Int16 value: " . $int16->getValue() . "\n";
     echo "UInt8 value: " . $uint8->getValue() . "\n";
@@ -99,7 +101,7 @@ echo "=====================================\n";
 try {
     $dividend = new Int8(50);
     $divisor = new Int8(3);
-    
+
     // This will throw UnexpectedValueException because 50/3 is not an integer
     $result = $dividend->divide($divisor);
 } catch (\UnexpectedValueException $e) {
@@ -109,12 +111,12 @@ try {
 try {
     $dividend = new Int8(50);
     $divisor = new Int8(5);
-    
+
     $quotient = $dividend->divide($divisor);
     $remainder = $dividend->mod($divisor);
-    
+
     echo "50 divided by 5 = " . $quotient->getValue() . "\n";
     echo "50 modulo 5 = " . $remainder->getValue() . "\n";
 } catch (\Exception $e) {
     echo "Error: " . $e->getMessage() . "\n";
-} 
+}

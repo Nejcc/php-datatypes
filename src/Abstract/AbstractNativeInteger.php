@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Nejcc\PhpDatatypes\Abstract;
 
 use Nejcc\PhpDatatypes\Interfaces\NativeIntegerInterface;
-use Nejcc\PhpDatatypes\Traits\ArithmeticOperationsTrait;
-use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
+use Nejcc\PhpDatatypes\Traits\NativeArithmeticOperationsTrait;
+use Nejcc\PhpDatatypes\Traits\NativeIntegerComparisonTrait;
 
 /**
  * Abstract class for native integer types.
@@ -15,13 +15,13 @@ use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
  */
 abstract class AbstractNativeInteger implements NativeIntegerInterface
 {
-    use ArithmeticOperationsTrait;
-    use IntegerComparisonTrait;
-
-    protected readonly int $value;
+    use NativeArithmeticOperationsTrait;
+    use NativeIntegerComparisonTrait;
 
     public const MIN_VALUE = null;
     public const MAX_VALUE = null;
+
+    protected readonly int $value;
 
     /**
      * @param int $value
@@ -31,8 +31,32 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         $this->setValue($value);
     }
 
+    public function __toString(): string
+    {
+        return (string)$this->value;
+    }
+
+    /**
+     * @return int
+     */
+    final public function getValue(): int
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param NativeIntegerInterface $other
+     *
+     * @return int
+     */
+    final public function compare(NativeIntegerInterface $other): int
+    {
+        return $this->value <=> $other->getValue();
+    }
+
     /**
      * @param int $value
+     *
      * @return void
      */
     protected function setValue(int $value): void
@@ -49,26 +73,10 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     }
 
     /**
-     * @return int
-     */
-    public function getValue(): int
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param NativeIntegerInterface $other
-     * @return int
-     */
-    public function compare(NativeIntegerInterface $other): int
-    {
-        return $this->value <=> $other->getValue();
-    }
-
-    /**
      * @param NativeIntegerInterface $other
      * @param callable $operation
      * @param string $operationName
+     *
      * @return $this
      */
     protected function performOperation(
@@ -89,6 +97,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     /**
      * @param int $a
      * @param int $b
+     *
      * @return int
      */
     protected function addValues(int $a, int $b): int
@@ -99,6 +108,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     /**
      * @param int $a
      * @param int $b
+     *
      * @return int
      */
     protected function subtractValues(int $a, int $b): int
@@ -109,6 +119,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     /**
      * @param int $a
      * @param int $b
+     *
      * @return int
      */
     protected function multiplyValues(int $a, int $b): int
@@ -119,6 +130,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     /**
      * @param int $a
      * @param int $b
+     *
      * @return int
      */
     protected function divideValues(int $a, int $b): int
@@ -137,6 +149,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
     /**
      * @param int $a
      * @param int $b
+     *
      * @return int
      */
     protected function modValues(int $a, int $b): int

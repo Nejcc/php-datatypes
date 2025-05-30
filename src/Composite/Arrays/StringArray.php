@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Arrays;
@@ -6,11 +7,10 @@ namespace Nejcc\PhpDatatypes\Composite\Arrays;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
-use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
-use Traversable;
 use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
+use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
 
-class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
+final class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * The array of string values.
@@ -23,6 +23,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Create a new StringArray instance.
      *
      * @param array $value
+     *
      * @throws InvalidStringException
      */
     public function __construct(array $value = [])
@@ -45,7 +46,9 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Add multiple strings to the array (returns a new instance).
      *
      * @param string ...$strings
+     *
      * @return self New instance with added values.
+     *
      * @throws InvalidStringException
      */
     public function add(string ...$strings): self
@@ -58,7 +61,9 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Remove multiple strings from the array (returns a new instance).
      *
      * @param string ...$strings
+     *
      * @return self New instance with removed values.
+     *
      * @throws InvalidStringException
      */
     public function remove(string ...$strings): self
@@ -77,6 +82,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Check if multiple strings exist in the array.
      *
      * @param string ...$strings
+     *
      * @return bool True if all strings are found, false otherwise.
      */
     public function contains(string ...$strings): bool
@@ -103,6 +109,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Get the array as a comma-separated string or with custom separator.
      *
      * @param string $separator Separator to use between strings (default: ", ").
+     *
      * @return string
      */
     public function toString(string $separator = ', '): string
@@ -114,11 +121,12 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Find strings that start with a specific prefix.
      *
      * @param string $prefix
+     *
      * @return array Array of strings that start with the given prefix.
      */
     public function filterByPrefix(string $prefix): array
     {
-        return array_values(array_filter($this->value, fn($str) => str_starts_with($str, $prefix)));
+        return array_values(array_filter($this->value, fn ($str) => str_starts_with($str, $prefix)));
     }
 
 
@@ -126,11 +134,12 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Find strings that contain a specific substring.
      *
      * @param string $substring
+     *
      * @return array Array of strings that contain the substring.
      */
     public function filterBySubstring(string $substring): array
     {
-        return array_values(array_filter($this->value, fn($str) => str_contains($str, $substring)));
+        return array_values(array_filter($this->value, fn ($str) => str_contains($str, $substring)));
     }
 
 
@@ -138,6 +147,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Get a string at a specific index.
      *
      * @param int $index
+     *
      * @return string|null
      */
     public function get(int $index): ?string
@@ -149,6 +159,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Convert all strings to uppercase (returns a new instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function toUpperCase(): self
@@ -160,6 +171,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Convert all strings to lowercase (returns a new instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function toLowerCase(): self
@@ -171,6 +183,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * Clear the array (returns a new empty instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function clear(): self
@@ -182,6 +195,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * ArrayAccess method to check if an offset exists.
      *
      * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists(mixed $offset): bool
@@ -193,6 +207,7 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * ArrayAccess method to get an offset.
      *
      * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
@@ -205,7 +220,9 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @return void
+     *
      * @throws InvalidStringException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -217,7 +234,9 @@ class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, It
      * ArrayAccess method to unset an offset (immutable, returns a new instance).
      *
      * @param mixed $offset
+     *
      * @return void
+     *
      * @throws InvalidStringException
      */
     public function offsetUnset(mixed $offset): void

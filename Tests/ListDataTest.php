@@ -7,7 +7,8 @@ namespace Nejcc\PhpDatatypes\Tests;
 use Nejcc\PhpDatatypes\Composite\ListData;
 use OutOfBoundsException;
 use PHPUnit\Framework\TestCase;
-class ListDataTest extends TestCase
+
+final class ListDataTest extends TestCase
 {
     public function testCanInitializeWithElements()
     {

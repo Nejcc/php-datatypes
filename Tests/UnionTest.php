@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
@@ -9,7 +10,7 @@ use Nejcc\PhpDatatypes\Composite\Union\Union;
 use PHPUnit\Framework\TestCase;
 use stdClass;
 
-class UnionTest extends TestCase
+final class UnionTest extends TestCase
 {
     /**
      * Test the constructor sets the allowed types.

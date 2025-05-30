@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Abstract;
@@ -19,6 +20,7 @@ abstract class ByteAbstraction
 
     /**
      * @param int $value
+     *
      * @throws \OutOfRangeException
      */
     public function __construct(int $value)
@@ -29,30 +31,35 @@ abstract class ByteAbstraction
         $this->value = $value;
     }
 
-    public function getValue(): int
+    public function __toString(): string
+    {
+        return (string)$this->value;
+    }
+
+    final public function getValue(): int
     {
         return $this->value;
     }
 
-    public function add(self|int $other): static
+    final public function add(self|int $other): static
     {
         $otherValue = $other instanceof self ? $other->value : $other;
         return new static($this->wrap($this->value + $otherValue));
     }
 
-    public function subtract(self|int $other): static
+    final public function subtract(self|int $other): static
     {
         $otherValue = $other instanceof self ? $other->value : $other;
         return new static($this->wrap($this->value - $otherValue));
     }
 
-    public function multiply(self|int $other): static
+    final public function multiply(self|int $other): static
     {
         $otherValue = $other instanceof self ? $other->value : $other;
         return new static($this->wrap($this->value * $otherValue));
     }
 
-    public function divide(self|int $other): static
+    final public function divide(self|int $other): static
     {
         $otherValue = $other instanceof self ? $other->value : $other;
         if ($otherValue === 0) {
@@ -61,89 +68,86 @@ abstract class ByteAbstraction
         return new static($this->wrap(intdiv($this->value, $otherValue)));
     }
 
-    public function and(self $other): static
+    final public function and(self $other): static
     {
         return new static($this->value & $other->value);
     }
 
-    public function or(self $other): static
+    final public function or(self $other): static
     {
         return new static($this->value | $other->value);
     }
 
-    public function xor(self $other): static
+    final public function xor(self $other): static
     {
         return new static($this->value ^ $other->value);
     }
 
-    public function not(): static
+    final public function not(): static
     {
         return new static(~$this->value & 0xFF);
     }
 
-    public function leftShift(int $positions): static
+    final public function leftShift(int $positions): static
     {
         return new static(($this->value << $positions) & 0xFF);
     }
 
-    public function rightShift(int $positions): static
+    final public function rightShift(int $positions): static
     {
         return new static($this->value >> $positions);
     }
 
-    public function shiftLeft(int $positions): static
+    final public function shiftLeft(int $positions): static
     {
         return $this->leftShift($positions);
     }
 
-    public function shiftRight(int $positions): static
+    final public function shiftRight(int $positions): static
     {
         return $this->rightShift($positions);
     }
 
-    public function equals(self $other): bool
+    final public function equals(self $other): bool
     {
         return $this->value === $other->value;
     }
 
-    public function isGreaterThan(self $other): bool
+    final public function isGreaterThan(self $other): bool
     {
         return $this->value > $other->value;
     }
 
-    public function isLessThan(self $other): bool
+    final public function isLessThan(self $other): bool
     {
         return $this->value < $other->value;
     }
 
-    public function toBinary(): string
+    final public function toBinary(): string
     {
         return sprintf('%08b', $this->value);
     }
 
-    public function toHex(): string
+    final public function toHex(): string
     {
         return sprintf('%02X', $this->value);
     }
 
-    public function __toString(): string
-    {
-        return (string)$this->value;
-    }
-
-    public static function fromBinary(string $binary): static
+    final public static function fromBinary(string $binary): static
     {
         return new static(bindec($binary));
     }
 
-    public static function fromHex(string $hex): static
+    final public static function fromHex(string $hex): static
     {
         return new static(hexdec($hex));
     }
 
     /**
      * Wrap a value to 0-255 (used for arithmetic).
+     *
      * @param int $value
+     *
      * @return int
      */
     protected function wrap(int $value): int
@@ -159,4 +163,4 @@ abstract class ByteAbstraction
         }
         // ... existing range check ...
     }
-} 
+}

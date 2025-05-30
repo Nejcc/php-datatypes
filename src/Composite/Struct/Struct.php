@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Composite\Struct;
 
 use InvalidArgumentException;
@@ -17,6 +19,35 @@ final class Struct extends BaseStruct
         foreach ($fields as $name => $type) {
             $this->addField($name, $type);
         }
+    }
+
+    /**
+     * Magic method for accessing fields like object properties.
+     *
+     * @param string $name The field name.
+     *
+     * @return mixed The field value.
+     *
+     * @throws InvalidArgumentException if the field doesn't exist.
+     */
+    public function __get(string $name): mixed
+    {
+        return $this->get($name);
+    }
+
+    /**
+     * Magic method for setting fields like object properties.
+     *
+     * @param string $name The field name.
+     * @param mixed $value The field value.
+     *
+     * @return void
+     *
+     * @throws InvalidArgumentException if the field doesn't exist or the value type doesn't match.
+     */
+    public function __set(string $name, mixed $value): void
+    {
+        $this->set($name, $value);
     }
 
     /**
@@ -64,32 +95,5 @@ final class Struct extends BaseStruct
     public function getFields(): array
     {
         return $this->fields;
-    }
-
-    /**
-     * Magic method for accessing fields like object properties.
-     *
-     * @param string $name The field name.
-     * @return mixed The field value.
-     *
-     * @throws InvalidArgumentException if the field doesn't exist.
-     */
-    public function __get(string $name): mixed
-    {
-        return $this->get($name);
-    }
-
-    /**
-     * Magic method for setting fields like object properties.
-     *
-     * @param string $name The field name.
-     * @param mixed $value The field value.
-     * @return void
-     *
-     * @throws InvalidArgumentException if the field doesn't exist or the value type doesn't match.
-     */
-    public function __set(string $name, mixed $value): void
-    {
-        $this->set($name, $value);
     }
 }

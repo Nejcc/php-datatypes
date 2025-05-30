@@ -1,27 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Abstract;
 
-abstract class ArrayAbstraction implements \Countable, \IteratorAggregate {
+abstract class ArrayAbstraction implements \Countable, \IteratorAggregate
+{
     protected array $value;
 
-    public function __construct(array $value) {
+    public function __construct(array $value)
+    {
         $this->value = $value;
     }
 
-    public function getValue(): array {
+    public function getValue(): array
+    {
         return $this->value;
     }
 
-    public function count(): int {
+    public function count(): int
+    {
         return count($this->value);
     }
 
-    public function getIterator(): \ArrayIterator {
+    public function getIterator(): \ArrayIterator
+    {
         return new \ArrayIterator($this->value);
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return $this->value;
     }
 
@@ -62,4 +70,4 @@ abstract class ArrayAbstraction implements \Countable, \IteratorAggregate {
         }
     }
 
-} 
+}

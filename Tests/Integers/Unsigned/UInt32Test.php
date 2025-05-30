@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Tests\Integers\Unsigned;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32;
 use PHPUnit\Framework\TestCase;
 
-class UInt32Test extends TestCase
+final class UInt32Test extends TestCase
 {
     public function testValidInitialization()
     {

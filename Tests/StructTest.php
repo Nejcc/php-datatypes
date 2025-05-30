@@ -8,7 +8,7 @@ use InvalidArgumentException;
 use Nejcc\PhpDatatypes\Composite\Struct\Struct;
 use PHPUnit\Framework\TestCase;
 
-class StructTest extends TestCase
+final class StructTest extends TestCase
 {
     public function testConstructionAndFieldRegistration(): void
     {
@@ -71,7 +71,7 @@ class StructTest extends TestCase
         $struct = new Struct([
             'obj' => 'stdClass',
         ]);
-        $obj = new class extends \stdClass {};
+        $obj = new class () extends \stdClass {};
         $struct->set('obj', $obj);
         $this->assertSame($obj, $struct->get('obj'));
     }

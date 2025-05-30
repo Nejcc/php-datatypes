@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-
 namespace Nejcc\PhpDatatypes\Encoding;
 
+use InvalidArgumentException;
 use Nejcc\PhpDatatypes\Interfaces\DecoderInterface;
 use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
-use InvalidArgumentException;
 
 /**
  * Class HuffmanEncoding
  * Implements Huffman compression and decompression.
  */
-class HuffmanEncoding implements EncoderInterface, DecoderInterface
+final class HuffmanEncoding implements DecoderInterface, EncoderInterface
 {
     /**
      * Encodes the data using Huffman encoding.
      *
      * @param string $data
+     *
      * @return string The encoded data with serialized frequency table.
      */
     public function encode(string $data): string
@@ -64,6 +64,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * Decodes the data using Huffman decoding.
      *
      * @param string $data The encoded data with serialized frequency table.
+     *
      * @return string The original decoded data.
      */
     public function decode(string $data): string
@@ -118,6 +119,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * Builds a frequency table for the given data.
      *
      * @param string $data
+     *
      * @return array Associative array with characters as keys and frequencies as values.
      */
     private function buildFrequencyTable(string $data): array
@@ -138,6 +140,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * Builds the Huffman tree from the frequency table.
      *
      * @param array $frequency
+     *
      * @return Node The root of the Huffman tree.
      */
     private function buildHuffmanTree(array $frequency): Node
@@ -176,6 +179,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * @param Node $node
      * @param string $prefix
      * @param array &$codes
+     *
      * @return void
      */
     private function generateCodes(Node $node, string $prefix, array &$codes): void
@@ -199,6 +203,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * Converts a bit string to a byte string.
      *
      * @param string $bits
+     *
      * @return string
      */
     private function bitsToBytes(string $bits): string
@@ -219,6 +224,7 @@ class HuffmanEncoding implements EncoderInterface, DecoderInterface
      * Converts a byte string back to a bit string.
      *
      * @param string $bytes
+     *
      * @return string
      */
     private function bytesToBits(string $bytes): string

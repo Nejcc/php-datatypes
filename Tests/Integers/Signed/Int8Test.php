@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests\Integers\Signed;
 
-
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int8;
 use PHPUnit\Framework\TestCase;
 
-class Int8Test extends TestCase
+final class Int8Test extends TestCase
 {
     public function testValidInitialization()
     {

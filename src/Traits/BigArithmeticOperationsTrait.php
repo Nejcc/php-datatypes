@@ -10,18 +10,7 @@ trait BigArithmeticOperationsTrait
 {
     /**
      * @param BigIntegerInterface $other
-     * @param callable $operation
-     * @param string $operationName
-     * @return $this
-     */
-    abstract protected function performOperation(
-        BigIntegerInterface $other,
-        callable $operation,
-        string $operationName
-    ): static;
-
-    /**
-     * @param BigIntegerInterface $other
+     *
      * @return $this
      */
     public function add(BigIntegerInterface $other): static
@@ -31,6 +20,7 @@ trait BigArithmeticOperationsTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return $this
      */
     public function subtract(BigIntegerInterface $other): static
@@ -40,6 +30,7 @@ trait BigArithmeticOperationsTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return $this
      */
     public function multiply(BigIntegerInterface $other): static
@@ -49,6 +40,7 @@ trait BigArithmeticOperationsTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return $this
      */
     public function divide(BigIntegerInterface $other): static
@@ -58,10 +50,23 @@ trait BigArithmeticOperationsTrait
 
     /**
      * @param BigIntegerInterface $other
+     *
      * @return $this
      */
     public function mod(BigIntegerInterface $other): static
     {
         return $this->performOperation($other, [$this, 'modValues'], 'mod');
     }
-} 
+    /**
+     * @param BigIntegerInterface $other
+     * @param callable $operation
+     * @param string $operationName
+     *
+     * @return $this
+     */
+    abstract protected function performOperation(
+        BigIntegerInterface $other,
+        callable $operation,
+        string $operationName
+    ): static;
+}

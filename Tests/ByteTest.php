@@ -7,15 +7,15 @@ namespace Nejcc\PhpDatatypes\Tests;
 use Nejcc\PhpDatatypes\Scalar\Byte;
 use PHPUnit\Framework\TestCase;
 
-class ByteTest extends TestCase
+final class ByteTest extends TestCase
 {
     /**
      * Test that the constructor throws an exception when the value is out of range.
      */
-    public function testConstructorThrowsExceptionOnInvalidValue()
+    public function testConstructorThrowsExceptionOnInvalidValue(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        new Byte(300); // Out of range value
+        $this->expectException(\OutOfRangeException::class);
+        new Byte(300);
     }
 
     /**

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Nejcc\PhpDatatypes\Composite\Arrays\IntArray;
 use PHPUnit\Framework\TestCase;
 
-class IntArrayTest extends TestCase
+final class IntArrayTest extends TestCase
 {
     public function testConstructionAndGet(): void
     {
@@ -77,4 +77,4 @@ class IntArrayTest extends TestCase
         $this->expectException(\TypeError::class);
         $arr->append('not an int');
     }
-} 
+}

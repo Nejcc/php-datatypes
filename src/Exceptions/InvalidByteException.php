@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Exceptions;
 
 use Exception;
 
-class InvalidByteException extends Exception
+final class InvalidByteException extends Exception
 {
     /**
      * Constructor for InvalidByteException.
