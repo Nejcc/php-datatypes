@@ -7,22 +7,13 @@ namespace Nejcc\PhpDatatypes\Composite\Struct;
 use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class Struct
+class AdvancedStruct
 {
     protected array $data = [];
     protected array $schema = [];
 
     public function __construct(array $schema, array $values = [])
     {
-        // Backward compatibility: convert old format ['id' => 'int', ...] to new format
-        $first = reset($schema);
-        if (is_string($first)) {
-            $newSchema = [];
-            foreach ($schema as $field => $type) {
-                $newSchema[$field] = ['type' => $type, 'nullable' => true];
-            }
-            $schema = $newSchema;
-        }
         $this->schema = $schema;
         foreach ($schema as $field => $def) {
             $alias = $def['alias'] ?? $field;
@@ -74,9 +65,6 @@ class Struct
 
     public function get(string $field)
     {
-        if (!array_key_exists($field, $this->schema)) {
-            throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
-        }
         return $this->data[$field] ?? null;
     }
 
@@ -126,66 +114,9 @@ class Struct
         $arr = [];
         if ($data !== false) {
             foreach ($data as $k => $v) {
-                $type = $schema[$k]['type'] ?? 'mixed';
-                $value = (string)$v;
-                // Cast to appropriate type
-                if ($type === 'int' || $type === 'integer') {
-                    $value = (int)$value;
-                } elseif ($type === 'float' || $type === 'double') {
-                    $value = (float)$value;
-                } elseif ($type === 'bool' || $type === 'boolean') {
-                    $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
-                }
-                $arr[$k] = $value;
+                $arr[$k] = (string)$v;
             }
         }
         return new self($schema, $arr);
     }
-
-    public function set(string $field, $value): void
-    {
-        if (!array_key_exists($field, $this->schema)) {
-            throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
-        }
-        $def = $this->schema[$field];
-        $type = $def['type'] ?? 'mixed';
-        $nullable = $def['nullable'] ?? false;
-        $rules = $def['rules'] ?? [];
-        if ($value === null && !$nullable) {
-            throw new InvalidArgumentException("Field '$field' cannot be null");
-        }
-        $this->validateField($field, $value, $type, $rules, $nullable);
-        $this->data[$field] = $value;
-    }
-
-    public function __set($field, $value): void
-    {
-        $this->set($field, $value);
-    }
-
-    public function __get($field)
-    {
-        return $this->get($field);
-    }
-
-    public function getFields(): array
-    {
-        $fields = [];
-        foreach ($this->schema as $field => $def) {
-            $fields[$field] = [
-                'type' => $def['type'] ?? 'mixed',
-                'value' => $this->data[$field] ?? null,
-            ];
-        }
-        return $fields;
-    }
-
-    public function addField(string $field, string $type): void
-    {
-        if (array_key_exists($field, $this->schema)) {
-            throw new InvalidArgumentException("Field '$field' already exists in the struct.");
-        }
-        $this->schema[$field] = ['type' => $type, 'nullable' => true];
-        $this->data[$field] = null;
-    }
-}
+} 
