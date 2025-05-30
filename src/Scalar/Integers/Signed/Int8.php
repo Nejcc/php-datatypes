@@ -53,8 +53,5 @@ final class Int8 extends AbstractNativeInteger
      */
     public const MAX_VALUE = 127;
 
-    public function __toString(): string
-    {
-        return (string)$this->getValue();
-    }
+
 }
