@@ -8,13 +8,14 @@ use ArrayAccess;
 use IteratorAggregate;
 use Traversable;
 use Nejcc\PhpDatatypes\Exceptions\InvalidByteException;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 
-readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
+class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var array<int> The byte values (0-255).
      */
-    private array $value;
+    protected array $value;
 
     /**
      * Constructor for ByteSlice.
@@ -26,22 +27,6 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
     {
         $this->validateBytes($value);
         $this->value = $value;
-    }
-
-    /**
-     * Validate that all elements are valid bytes (0-255).
-     *
-     * @param array $array The array to validate.
-     * @throws InvalidByteException If any element is not a valid byte.
-     * @return void
-     */
-    private function validateBytes(array $array): void
-    {
-        foreach ($array as $item) {
-            if (!is_int($item) || $item < 0 || $item > 255) {
-                throw new InvalidByteException("All elements must be valid bytes (0-255). Invalid value: " . $item);
-            }
-        }
     }
 
     /**
@@ -158,9 +143,9 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
     /**
      * Get an iterator for the byte array.
      *
-     * @return Traversable An iterator for the byte array.
+     * @return \ArrayIterator An iterator for the byte array.
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->value);
     }

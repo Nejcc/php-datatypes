@@ -8,15 +8,16 @@ use Countable;
 use IteratorAggregate;
 use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
 use Traversable;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 
-readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
+class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * The array of string values.
      *
      * @var array
      */
-    private array $value;
+    protected array $value;
 
     /**
      * Create a new StringArray instance.
@@ -26,24 +27,8 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      */
     public function __construct(array $value = [])
     {
-        $this->validateArray($value);
+        $this->validateStrings($value);
         $this->value = $value;
-    }
-
-    /**
-     * Validates that the array consists only of strings.
-     *
-     * @param array $array
-     * @return void
-     * @throws InvalidStringException
-     */
-    private function validateArray(array $array): void
-    {
-        foreach ($array as $item) {
-            if (!is_string($item)) {
-                throw new InvalidStringException("All elements must be strings. Invalid value: " . json_encode($item));
-            }
-        }
     }
 
     /**
@@ -65,7 +50,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      */
     public function add(string ...$strings): self
     {
-        $this->validateArray($strings);
+        $this->validateStrings($strings);
         return new self(array_merge($this->value, $strings));
     }
 
@@ -243,9 +228,9 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an iterator for traversing the array.
      *
-     * @return Traversable
+     * @return \ArrayIterator
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->value);
     }
