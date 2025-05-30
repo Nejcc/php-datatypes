@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class RangeRule implements ValidationRule
+final class RangeRule implements ValidationRule
 {
     private float $min;
     private float $max;
@@ -35,4 +35,4 @@ class RangeRule implements ValidationRule
 
         return true;
     }
-} 
+}

@@ -4,96 +4,188 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Struct;
 
-use InvalidArgumentException;
-use Nejcc\PhpDatatypes\Abstract\BaseStruct;
+use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
+use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-final class Struct extends BaseStruct
+class Struct
 {
-    /**
-     * Struct constructor.
-     *
-     * @param array<string, string> $fields Array of field names and their expected types.
-     */
-    public function __construct(array $fields)
+    protected array $data = [];
+    protected array $schema = [];
+
+    public function __construct(array $schema, array $values = [])
     {
-        foreach ($fields as $name => $type) {
-            $this->addField($name, $type);
+        // Backward compatibility: convert old format ['id' => 'int', ...] to new format
+        $first = reset($schema);
+        if (is_string($first)) {
+            $newSchema = [];
+            foreach ($schema as $field => $type) {
+                $newSchema[$field] = ['type' => $type, 'nullable' => true];
+            }
+            $schema = $newSchema;
+        }
+        $this->schema = $schema;
+        foreach ($schema as $field => $def) {
+            $alias = $def['alias'] ?? $field;
+            $type = $def['type'] ?? 'mixed';
+            $nullable = $def['nullable'] ?? false;
+            $default = $def['default'] ?? null;
+            $rules = $def['rules'] ?? [];
+            $value = $values[$field] ?? $values[$alias] ?? $default;
+            if ($value === null && !$nullable && $default === null && !array_key_exists($field, $values)) {
+                throw new InvalidArgumentException("Field '$field' is required and has no value");
+            }
+            if ($value !== null) {
+                $this->validateField($field, $value, $type, $rules, $nullable);
+            }
+            $this->data[$field] = $value;
         }
     }
 
-    /**
-     * Magic method for accessing fields like object properties.
-     *
-     * @param string $name The field name.
-     *
-     * @return mixed The field value.
-     *
-     * @throws InvalidArgumentException if the field doesn't exist.
-     */
-    public function __get(string $name): mixed
+    protected function validateField(string $field, $value, $type, array $rules, bool $nullable): void
     {
-        return $this->get($name);
-    }
-
-    /**
-     * Magic method for setting fields like object properties.
-     *
-     * @param string $name The field name.
-     * @param mixed $value The field value.
-     *
-     * @return void
-     *
-     * @throws InvalidArgumentException if the field doesn't exist or the value type doesn't match.
-     */
-    public function __set(string $name, mixed $value): void
-    {
-        $this->set($name, $value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function set(string $name, mixed $value): void
-    {
-        if (!isset($this->fields[$name])) {
-            throw new InvalidArgumentException("Field '$name' does not exist in the struct.");
-        }
-
-        $expectedType = $this->fields[$name]['type'];
-        $actualType = get_debug_type($value);
-
-        // Handle nullable types (e.g., "?string")
-        if ($this->isNullable($expectedType) && $value === null) {
-            $this->fields[$name]['value'] = $value;
+        if ($value === null && $nullable) {
             return;
         }
-
-        $baseType = $this->stripNullable($expectedType);
-
-        if ($actualType !== $baseType && !is_subclass_of($value, $baseType)) {
-            throw new InvalidArgumentException("Field '$name' expects type '$expectedType', but got '$actualType'.");
+        // Type check
+        if ($type !== 'mixed' && !$this->isValidType($value, $type)) {
+            throw new InvalidArgumentException("Field '$field' must be of type $type");
         }
-
-        $this->fields[$name]['value'] = $value;
+        // Rules
+        foreach ($rules as $rule) {
+            if (is_callable($rule)) {
+                if (!$rule($value)) {
+                    throw new ValidationException("Validation failed for field '$field'");
+                }
+            }
+        }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function get(string $name): mixed
+    protected function isValidType($value, $type): bool
     {
-        if (!isset($this->fields[$name])) {
-            throw new InvalidArgumentException("Field '$name' does not exist in the struct.");
-        }
-
-        return $this->fields[$name]['value'];
+        if ($type === 'int' || $type === 'integer') return is_int($value);
+        if ($type === 'float' || $type === 'double') return is_float($value);
+        if ($type === 'string') return is_string($value);
+        if ($type === 'bool' || $type === 'boolean') return is_bool($value);
+        if ($type === 'array') return is_array($value);
+        if ($type === 'object') return is_object($value);
+        if (class_exists($type)) return $value instanceof $type;
+        return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public function get(string $field)
+    {
+        if (!array_key_exists($field, $this->schema)) {
+            throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
+        }
+        return $this->data[$field] ?? null;
+    }
+
+    public function toArray(bool $useAliases = false): array
+    {
+        $result = [];
+        foreach ($this->schema as $field => $def) {
+            $alias = $def['alias'] ?? $field;
+            $value = $this->data[$field];
+            if ($value instanceof self) {
+                $value = $value->toArray($useAliases);
+            }
+            $result[$useAliases ? $alias : $field] = $value;
+        }
+        return $result;
+    }
+
+    public static function fromArray(array $schema, array $data): self
+    {
+        return new self($schema, $data);
+    }
+
+    public function toJson(bool $useAliases = false): string
+    {
+        return json_encode($this->toArray($useAliases));
+    }
+
+    public static function fromJson(array $schema, string $json): self
+    {
+        $data = json_decode($json, true);
+        return new self($schema, $data);
+    }
+
+    public function toXml(bool $useAliases = false): string
+    {
+        $arr = $this->toArray($useAliases);
+        $xml = new \SimpleXMLElement('<struct></struct>');
+        foreach ($arr as $k => $v) {
+            $xml->addChild($k, htmlspecialchars((string)$v));
+        }
+        return $xml->asXML();
+    }
+
+    public static function fromXml(array $schema, string $xml): self
+    {
+        $data = @simplexml_load_string($xml);
+        $arr = [];
+        if ($data !== false) {
+            foreach ($data as $k => $v) {
+                $type = $schema[$k]['type'] ?? 'mixed';
+                $value = (string)$v;
+                // Cast to appropriate type
+                if ($type === 'int' || $type === 'integer') {
+                    $value = (int)$value;
+                } elseif ($type === 'float' || $type === 'double') {
+                    $value = (float)$value;
+                } elseif ($type === 'bool' || $type === 'boolean') {
+                    $value = filter_var($value, FILTER_VALIDATE_BOOLEAN);
+                }
+                $arr[$k] = $value;
+            }
+        }
+        return new self($schema, $arr);
+    }
+
+    public function set(string $field, $value): void
+    {
+        if (!array_key_exists($field, $this->schema)) {
+            throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
+        }
+        $def = $this->schema[$field];
+        $type = $def['type'] ?? 'mixed';
+        $nullable = $def['nullable'] ?? false;
+        $rules = $def['rules'] ?? [];
+        if ($value === null && !$nullable) {
+            throw new InvalidArgumentException("Field '$field' cannot be null");
+        }
+        $this->validateField($field, $value, $type, $rules, $nullable);
+        $this->data[$field] = $value;
+    }
+
+    public function __set($field, $value): void
+    {
+        $this->set($field, $value);
+    }
+
+    public function __get($field)
+    {
+        return $this->get($field);
+    }
+
     public function getFields(): array
     {
-        return $this->fields;
+        $fields = [];
+        foreach ($this->schema as $field => $def) {
+            $fields[$field] = [
+                'type' => $def['type'] ?? 'mixed',
+                'value' => $this->data[$field] ?? null,
+            ];
+        }
+        return $fields;
+    }
+
+    public function addField(string $field, string $type): void
+    {
+        if (array_key_exists($field, $this->schema)) {
+            throw new InvalidArgumentException("Field '$field' already exists in the struct.");
+        }
+        $this->schema[$field] = ['type' => $type, 'nullable' => true];
+        $this->data[$field] = null;
     }
 }

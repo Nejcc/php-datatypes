@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class EmailRule implements ValidationRule
+final class EmailRule implements ValidationRule
 {
     public function validate(mixed $value, string $fieldName): bool
     {
@@ -25,4 +25,4 @@ class EmailRule implements ValidationRule
 
         return true;
     }
-} 
+}

@@ -1,18 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Composite\Vector;
 
 use Nejcc\PhpDatatypes\Abstract\AbstractVector;
 use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 
-class Vec3 extends AbstractVector
+final class Vec3 extends AbstractVector
 {
-    protected function validateComponents(array $components): void
-    {
-        $this->validateComponentCount($components, 3);
-        $this->validateNumericComponents($components);
-    }
-
     public function getX(): float
     {
         return $this->getComponent(0);
@@ -70,4 +66,9 @@ class Vec3 extends AbstractVector
         $this->validateComponents($value);
         $this->components = $value;
     }
-} 
+    protected function validateComponents(array $components): void
+    {
+        $this->validateComponentCount($components, 3);
+        $this->validateNumericComponents($components);
+    }
+}

@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class UrlRule implements ValidationRule
+final class UrlRule implements ValidationRule
 {
     private bool $requireHttps;
 
@@ -38,4 +38,4 @@ class UrlRule implements ValidationRule
 
         return true;
     }
-} 
+}

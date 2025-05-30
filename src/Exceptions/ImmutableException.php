@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Exceptions;
 
-class ImmutableException extends \Exception {} 
+final class ImmutableException extends \Exception
+{
+}

@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class MinLengthRule implements ValidationRule
+final class MinLengthRule implements ValidationRule
 {
     private int $minLength;
 
@@ -32,4 +32,4 @@ class MinLengthRule implements ValidationRule
 
         return true;
     }
-} 
+}

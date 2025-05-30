@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Composite\Vector;
 
 use Nejcc\PhpDatatypes\Composite\Vector\Vec4;
 use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class Vec4Test extends TestCase
+final class Vec4Test extends TestCase
 {
     public function testCreateValidVec4(): void
     {
@@ -40,10 +42,10 @@ class Vec4Test extends TestCase
         $vec = new Vec4([1.0, 2.0, 2.0, 2.0]);
         $normalized = $vec->normalize();
         $this->assertEquals(1.0, $normalized->magnitude());
-        $this->assertEquals(1/sqrt(13), $normalized->getX());
-        $this->assertEquals(2/sqrt(13), $normalized->getY());
-        $this->assertEquals(2/sqrt(13), $normalized->getZ());
-        $this->assertEquals(2/sqrt(13), $normalized->getW());
+        $this->assertEquals(1 / sqrt(13), $normalized->getX());
+        $this->assertEquals(2 / sqrt(13), $normalized->getY());
+        $this->assertEquals(2 / sqrt(13), $normalized->getZ());
+        $this->assertEquals(2 / sqrt(13), $normalized->getW());
     }
 
     public function testNormalizeZeroVector(): void
@@ -148,7 +150,7 @@ class Vec4Test extends TestCase
         $vec1 = new Vec4([1.0, 2.0, 3.0, 4.0]);
         $vec2 = new Vec4([1.0, 2.0, 3.0, 4.0]);
         $vec3 = new Vec4([4.0, 3.0, 2.0, 1.0]);
-        
+
         $this->assertTrue($vec1->equals($vec2));
         $this->assertFalse($vec1->equals($vec3));
     }
@@ -159,4 +161,4 @@ class Vec4Test extends TestCase
         $vec2 = new Vec4([1.0, 2.0, 2.0, 2.0]);
         $this->assertEquals(sqrt(13), $vec1->distance($vec2));
     }
-} 
+}

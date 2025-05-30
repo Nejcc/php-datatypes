@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 
-class InvalidArgumentException extends BaseInvalidArgumentException
+final class InvalidArgumentException extends BaseInvalidArgumentException
 {
     /**
      * Create a new invalid argument exception
@@ -23,6 +25,7 @@ class InvalidArgumentException extends BaseInvalidArgumentException
      *
      * @param int $expected Expected number of components
      * @param int $actual Actual number of components
+     *
      * @return self
      */
     public static function invalidComponentCount(int $expected, int $actual): self
@@ -38,6 +41,7 @@ class InvalidArgumentException extends BaseInvalidArgumentException
      * Create an exception for non-numeric components
      *
      * @param array $components The invalid components
+     *
      * @return self
      */
     public static function nonNumericComponents(array $components): self
@@ -53,6 +57,7 @@ class InvalidArgumentException extends BaseInvalidArgumentException
      *
      * @param int $expected Expected dimension
      * @param int $actual Actual dimension
+     *
      * @return self
      */
     public static function differentDimensions(int $expected, int $actual): self
@@ -63,4 +68,4 @@ class InvalidArgumentException extends BaseInvalidArgumentException
             $actual
         ));
     }
-} 
+}

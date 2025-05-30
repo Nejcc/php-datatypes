@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Exceptions;
 
-class ValidationException extends \Exception {} 
+final class ValidationException extends \Exception
+{
+}

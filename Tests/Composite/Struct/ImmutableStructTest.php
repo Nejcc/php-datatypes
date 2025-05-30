@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Tests\Composite\Struct;
 
 use Nejcc\PhpDatatypes\Composite\Struct\ImmutableStruct;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\MinLengthRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\RangeRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\PatternRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\EmailRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\CompositeRule;
 use Nejcc\PhpDatatypes\Composite\Struct\Rules\CustomRule;
-use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\EmailRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\MinLengthRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\PasswordRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\PatternRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\RangeRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\SlugRule;
+use Nejcc\PhpDatatypes\Composite\Struct\Rules\UrlRule;
 use Nejcc\PhpDatatypes\Exceptions\ImmutableException;
+use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 use PHPUnit\Framework\TestCase;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\UrlRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\SlugRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\CompositeRule;
-use Nejcc\PhpDatatypes\Composite\Struct\Rules\PasswordRule;
 
-class ImmutableStructTest extends TestCase
+final class ImmutableStructTest extends TestCase
 {
     public function testBasicStructCreation(): void
     {
@@ -388,7 +388,7 @@ class ImmutableStructTest extends TestCase
                 'type' => 'string',
                 'rules' => [
                     new CustomRule(
-                        fn($value) => strlen($value) >= 8 && preg_match('/[A-Z]/', $value) && preg_match('/[a-z]/', $value) && preg_match('/[0-9]/', $value),
+                        fn ($value) => strlen($value) >= 8 && preg_match('/[A-Z]/', $value) && preg_match('/[a-z]/', $value) && preg_match('/[0-9]/', $value),
                         'must be at least 8 characters long and contain uppercase, lowercase, and numbers'
                     )
                 ]
@@ -430,7 +430,7 @@ class ImmutableStructTest extends TestCase
                 'rules' => [
                     new EmailRule(),
                     new CustomRule(
-                        fn($value) => str_ends_with($value, '.com'),
+                        fn ($value) => str_ends_with($value, '.com'),
                         'must be a .com email address'
                     )
                 ]
@@ -675,4 +675,53 @@ class ImmutableStructTest extends TestCase
         $this->expectExceptionMessage("Field 'password' must contain at least one special character");
         $struct->with(['password' => 'Password123']);
     }
-} 
+
+    public function testStructInheritance(): void
+    {
+        // Create a parent struct
+        $parentStruct = new ImmutableStruct(
+            ['name' => ['type' => 'string'], 'age' => ['type' => 'int']],
+            [
+                'name' => 'Parent',
+                'age' => 30
+            ]
+        );
+
+        // Create a child struct that inherits from the parent
+        $childStruct = new ImmutableStruct(
+            [
+                'name' => ['type' => 'string', 'rules' => [new MinLengthRule(1)]],
+                'age' => ['type' => 'int', 'rules' => [new RangeRule(0, 150)]],
+                'grade' => ['type' => 'string', 'rules' => [new MinLengthRule(1)]]
+            ],
+            [
+                'name' => 'Child',
+                'age' => 10,
+                'grade' => 'A'
+            ],
+            $parentStruct
+        );
+
+        // Verify that the child struct has a parent
+        $this->assertTrue($childStruct->hasParent());
+        $this->assertSame($parentStruct, $childStruct->getParent());
+
+        // Verify that the child struct inherits fields from the parent
+        $allFields = $childStruct->getAllFields();
+        $this->assertArrayHasKey('name', $allFields);
+        $this->assertArrayHasKey('age', $allFields);
+        $this->assertArrayHasKey('grade', $allFields);
+        $this->assertEquals('Child', $allFields['name']);
+        $this->assertEquals(10, $allFields['age']);
+        $this->assertEquals('A', $allFields['grade']);
+
+        // Verify that the child struct inherits validation rules from the parent
+        $allRules = $childStruct->getAllRules();
+        $this->assertArrayHasKey('name', $allRules);
+        $this->assertArrayHasKey('age', $allRules);
+        $this->assertArrayHasKey('grade', $allRules);
+        $this->assertCount(1, $allRules['name']);
+        $this->assertCount(1, $allRules['age']);
+        $this->assertCount(1, $allRules['grade']);
+    }
+}

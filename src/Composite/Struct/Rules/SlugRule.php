@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class SlugRule implements ValidationRule
+final class SlugRule implements ValidationRule
 {
     private int $minLength;
     private int $maxLength;
@@ -65,4 +65,4 @@ class SlugRule implements ValidationRule
 
         return true;
     }
-} 
+}

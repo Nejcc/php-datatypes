@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Composite\Arrays;
 
 use Nejcc\PhpDatatypes\Composite\Arrays\TypeSafeArray;
@@ -7,7 +9,7 @@ use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 use Nejcc\PhpDatatypes\Exceptions\TypeMismatchException;
 use PHPUnit\Framework\TestCase;
 
-class TypeSafeArrayTest extends TestCase
+final class TypeSafeArrayTest extends TestCase
 {
     public function testCreateValidTypeSafeArray(): void
     {
@@ -60,7 +62,7 @@ class TypeSafeArrayTest extends TestCase
         $array[] = $obj1;
         $array[] = $obj2;
 
-        $mapped = $array->map(function($item) {
+        $mapped = $array->map(function ($item) {
             $new = new \stdClass();
             $new->mapped = true;
             return $new;
@@ -82,7 +84,7 @@ class TypeSafeArrayTest extends TestCase
         $array[] = $obj1;
         $array[] = $obj2;
 
-        $filtered = $array->filter(function($item) {
+        $filtered = $array->filter(function ($item) {
             return $item->value === 1;
         });
 
@@ -101,7 +103,7 @@ class TypeSafeArrayTest extends TestCase
         $array[] = $obj1;
         $array[] = $obj2;
 
-        $sum = $array->reduce(function($carry, $item) {
+        $sum = $array->reduce(function ($carry, $item) {
             return $carry + $item->value;
         }, 0);
 
@@ -112,7 +114,7 @@ class TypeSafeArrayTest extends TestCase
     {
         $array = new TypeSafeArray(\stdClass::class);
         $obj = new \stdClass();
-        
+
         // Test offsetSet
         $array[0] = $obj;
         $this->assertTrue(isset($array[0]));
@@ -150,4 +152,4 @@ class TypeSafeArrayTest extends TestCase
 
         $this->assertEquals('[{"test":"value"}]', (string)$array);
     }
-} 
+}

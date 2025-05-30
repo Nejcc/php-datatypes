@@ -13,8 +13,8 @@ final class StructTest extends TestCase
     public function testConstructionAndFieldRegistration(): void
     {
         $struct = new Struct([
-            'id' => 'int',
-            'name' => 'string',
+            'id' => ['type' => 'int', 'nullable' => true],
+            'name' => ['type' => 'string', 'nullable' => true],
         ]);
         $fields = $struct->getFields();
         $this->assertArrayHasKey('id', $fields);
@@ -28,8 +28,8 @@ final class StructTest extends TestCase
     public function testSetAndGet(): void
     {
         $struct = new Struct([
-            'id' => 'int',
-            'name' => 'string',
+            'id' => ['type' => 'int', 'nullable' => true],
+            'name' => ['type' => 'string', 'nullable' => true],
         ]);
         $struct->set('id', 42);
         $struct->set('name', 'Alice');
@@ -40,7 +40,7 @@ final class StructTest extends TestCase
     public function testSetWrongTypeThrows(): void
     {
         $struct = new Struct([
-            'id' => 'int',
+            'id' => ['type' => 'int', 'nullable' => true],
         ]);
         $this->expectException(InvalidArgumentException::class);
         $struct->set('id', 'not an int');
@@ -49,7 +49,7 @@ final class StructTest extends TestCase
     public function testSetNullableField(): void
     {
         $struct = new Struct([
-            'desc' => '?string',
+            'desc' => ['type' => 'string', 'nullable' => true],
         ]);
         $struct->set('desc', null);
         $this->assertNull($struct->get('desc'));
@@ -59,17 +59,17 @@ final class StructTest extends TestCase
 
     public function testSetNonNullableFieldNullThrows(): void
     {
-        $struct = new Struct([
-            'id' => 'int',
-        ]);
         $this->expectException(InvalidArgumentException::class);
-        $struct->set('id', null);
+        $this->expectExceptionMessage("Field 'id' is required and has no value");
+        new Struct([
+            'id' => ['type' => 'int', 'nullable' => false],
+        ]);
     }
 
     public function testSetSubclass(): void
     {
         $struct = new Struct([
-            'obj' => 'stdClass',
+            'obj' => ['type' => 'stdClass', 'nullable' => true],
         ]);
         $obj = new class () extends \stdClass {};
         $struct->set('obj', $obj);
@@ -79,7 +79,7 @@ final class StructTest extends TestCase
     public function testGetNonexistentFieldThrows(): void
     {
         $struct = new Struct([
-            'id' => 'int',
+            'id' => ['type' => 'int', 'nullable' => true],
         ]);
         $this->expectException(InvalidArgumentException::class);
         $struct->get('missing');
@@ -88,7 +88,7 @@ final class StructTest extends TestCase
     public function testSetNonexistentFieldThrows(): void
     {
         $struct = new Struct([
-            'id' => 'int',
+            'id' => ['type' => 'int', 'nullable' => true],
         ]);
         $this->expectException(InvalidArgumentException::class);
         $struct->set('missing', 123);
@@ -98,7 +98,7 @@ final class StructTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         // Simulate duplicate by calling addField directly via reflection
-        $struct = new Struct(['id' => 'int']);
+        $struct = new Struct(['id' => ['type' => 'int', 'nullable' => true]]);
         $ref = new \ReflectionClass($struct);
         $method = $ref->getMethod('addField');
         $method->setAccessible(true);
@@ -108,7 +108,7 @@ final class StructTest extends TestCase
     public function testMagicGetSet(): void
     {
         $struct = new Struct([
-            'foo' => 'int',
+            'foo' => ['type' => 'int', 'nullable' => true],
         ]);
         $struct->foo = 123;
         $this->assertSame(123, $struct->foo);

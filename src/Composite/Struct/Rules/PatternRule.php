@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class PatternRule implements ValidationRule
+final class PatternRule implements ValidationRule
 {
     private string $pattern;
 
@@ -32,4 +32,4 @@ class PatternRule implements ValidationRule
 
         return true;
     }
-} 
+}

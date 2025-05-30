@@ -21,4 +21,4 @@ vendor
 vendor/
 composer.lock
 todo.txt
-/build/
+/build/**

@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
-use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class CompositeRule implements ValidationRule
+final class CompositeRule implements ValidationRule
 {
     /**
      * @var ValidationRule[]
@@ -37,6 +36,7 @@ class CompositeRule implements ValidationRule
      * Create a new composite rule from an array of rules
      *
      * @param ValidationRule[] $rules
+     *
      * @return self
      */
     public static function fromArray(array $rules): self
@@ -48,10 +48,11 @@ class CompositeRule implements ValidationRule
      * Add a rule to the composite
      *
      * @param ValidationRule $rule
+     *
      * @return self A new composite rule with the added rule
      */
     public function withRule(ValidationRule $rule): self
     {
         return new self(...array_merge($this->rules, [$rule]));
     }
-} 
+}

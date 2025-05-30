@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 
+use Closure;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
-use Closure;
 
-class CustomRule implements ValidationRule
+final class CustomRule implements ValidationRule
 {
     private Closure $validator;
     private string $errorMessage;
@@ -28,7 +28,7 @@ class CustomRule implements ValidationRule
     public function validate(mixed $value, string $fieldName): bool
     {
         $isValid = ($this->validator)($value);
-        
+
         if (!$isValid) {
             throw new ValidationException(
                 "Field '$fieldName': {$this->errorMessage}"
@@ -37,4 +37,4 @@ class CustomRule implements ValidationRule
 
         return true;
     }
-} 
+}

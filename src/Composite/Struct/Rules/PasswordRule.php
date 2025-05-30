@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Composite\Struct\Rules;
 use Nejcc\PhpDatatypes\Composite\Struct\ValidationRule;
 use Nejcc\PhpDatatypes\Exceptions\ValidationException;
 
-class PasswordRule implements ValidationRule
+final class PasswordRule implements ValidationRule
 {
     private int $minLength;
     private bool $requireUppercase;
@@ -79,4 +79,4 @@ class PasswordRule implements ValidationRule
 
         return true;
     }
-} 
+}

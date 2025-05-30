@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Composite\Vector;
 
 use Nejcc\PhpDatatypes\Composite\Vector\Vec2;
 use Nejcc\PhpDatatypes\Exceptions\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class Vec2Test extends TestCase
+final class Vec2Test extends TestCase
 {
     public function testCreateValidVec2(): void
     {
@@ -121,7 +123,7 @@ class Vec2Test extends TestCase
         $vec1 = new Vec2([1.0, 2.0]);
         $vec2 = new Vec2([1.0, 2.0]);
         $vec3 = new Vec2([2.0, 1.0]);
-        
+
         $this->assertTrue($vec1->equals($vec2));
         $this->assertFalse($vec1->equals($vec3));
     }
@@ -132,4 +134,4 @@ class Vec2Test extends TestCase
         $vec2 = new Vec2([3.0, 4.0]);
         $this->assertEquals(5.0, $vec1->distance($vec2));
     }
-} 
+}
