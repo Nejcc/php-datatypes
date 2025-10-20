@@ -16,14 +16,16 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "ext-bcmath": "*",
         "ext-ctype": "*",
         "ext-zlib": "*"
     },
     "require-dev": {
         "laravel/pint": "^1.22",
-        "phpunit/phpunit": "^11.4.2"
+        "phpunit/phpunit": "^11.4.2",
+        "phpstan/phpstan": "^1.10",
+        "infection/infection": "^0.27"
     },
     "autoload": {
         "psr-4": {
@@ -41,7 +43,12 @@
     "scripts": {
         "test": "vendor/bin/phpunit",
         "test-box": "vendor/bin/phpunit --testdox",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "phpstan": "vendor/bin/phpstan analyse",
+        "phpstan-baseline": "vendor/bin/phpstan analyse --generate-baseline",
+        "benchmark": "php benchmarks/run_benchmarks.php",
+        "infection": "vendor/bin/infection",
+        "infection-baseline": "vendor/bin/infection --generate-baseline"
     },
     "config": {
         "sort-packages": true
