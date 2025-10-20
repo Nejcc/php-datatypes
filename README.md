@@ -42,9 +42,13 @@ PHP Datatypes is designed to address the challenges of modern PHP development, w
 ## Features
 - **Strict Scalar Types:** Signed/unsigned integers (Int8, UInt8, etc.), floating points (Float32, Float64), booleans, chars, and bytes
 - **Composite Types:** Structs, arrays, unions, lists, dictionaries, and more
+- **Algebraic Data Types:** Option<T> for nullable values, Result<T, E> for error handling
 - **Type-safe Operations:** Arithmetic, validation, and conversion with built-in safeguards
-- **Serialization:** Easy conversion to/from array, JSON, and XML
-- **Laravel Integration:** Ready for use in modern PHP frameworks
+- **Serialization:** Easy conversion to/from array, JSON, XML, and binary formats
+- **Laravel Integration:** Validation rules, Eloquent casts, form requests, and service provider
+- **Performance Benchmarks:** Built-in benchmarking suite to compare with native PHP types
+- **Static Analysis:** PHPStan level 9 configuration for maximum code quality
+- **Mutation Testing:** Infection configuration for comprehensive test coverage
 - **Extensible:** Easily define your own types and validation rules
 
 ## Installation
@@ -134,6 +138,60 @@ $result = $int1->add($int2); // Performs addition
 echo $result->getValue(); // 80
 ```
 
+### Algebraic Data Types
+#### Option Type for Nullable Values
+```php
+use Nejcc\PhpDatatypes\Composite\Option;
+
+$someValue = Option::some("Hello");
+$noneValue = Option::none();
+
+$processed = $someValue
+    ->map(fn($value) => strtoupper($value))
+    ->unwrapOr("DEFAULT");
+
+echo $processed; // "HELLO"
+```
+
+#### Result Type for Error Handling
+```php
+use Nejcc\PhpDatatypes\Composite\Result;
+
+$result = Result::try(function () {
+    return new Int8(42);
+});
+
+if ($result->isOk()) {
+    echo $result->unwrap()->getValue(); // 42
+} else {
+    echo "Error: " . $result->unwrapErr();
+}
+```
+
+### Laravel Integration
+#### Validation Rules
+```php
+// In your form request
+public function rules(): array
+{
+    return [
+        'age' => ['required', 'int8'],
+        'user_id' => ['required', 'uint8'],
+        'balance' => ['required', 'float32'],
+    ];
+}
+```
+
+#### Eloquent Casts
+```php
+// In your model
+protected $casts = [
+    'age' => Int8Cast::class,
+    'user_id' => 'uint8',
+    'balance' => 'float32',
+];
+```
+
 ## Roadmap
 
 ```md
@@ -193,11 +251,36 @@ Data Types
     └── Channel
 ```
 
-## Testing
+## Development Tools
 
+### Testing
 Run the test suite with:
 ```bash
 composer test
+```
+
+### Static Analysis
+Run PHPStan for static analysis:
+```bash
+composer phpstan
+```
+
+### Mutation Testing
+Run Infection for mutation testing:
+```bash
+composer infection
+```
+
+### Performance Benchmarks
+Run performance benchmarks:
+```bash
+composer benchmark
+```
+
+### Code Style
+Run Laravel Pint for code formatting:
+```bash
+vendor/bin/pint
 ```
 
 ## Changelog
