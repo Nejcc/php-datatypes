@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Abstract;
 
+use Nejcc\PhpDatatypes\Attributes\Range;
 use Nejcc\PhpDatatypes\Interfaces\NativeIntegerInterface;
 use Nejcc\PhpDatatypes\Traits\NativeArithmeticOperationsTrait;
 use Nejcc\PhpDatatypes\Traits\NativeIntegerComparisonTrait;
@@ -71,6 +72,7 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
 
         $this->value = $value;
     }
+
 
     /**
      * @param NativeIntegerInterface $other
