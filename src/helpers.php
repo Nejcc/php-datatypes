@@ -22,6 +22,8 @@ use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt16;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt32;
 use Nejcc\PhpDatatypes\Scalar\Integers\Unsigned\UInt8;
 use Nejcc\PhpDatatypes\Composite\Union\UnionType;
+use Nejcc\PhpDatatypes\Composite\Option;
+use Nejcc\PhpDatatypes\Composite\Result;
 
 if (!function_exists('int8')) {
     /**
@@ -522,4 +524,137 @@ if (!function_exists('toBinaryListData')) {
 }
 if (!function_exists('fromBinaryListData')) {
     function fromBinaryListData(string $bin): ListData { return new ListData(unserialize($bin)); }
+}
+
+// --- Option Type Helpers ---
+
+if (!function_exists('some')) {
+    /**
+     * Create a Some Option with a value
+     * 
+     * @param mixed $value
+     * @return Option
+     */
+    function some(mixed $value): Option
+    {
+        return Option::some($value);
+    }
+}
+
+if (!function_exists('none')) {
+    /**
+     * Create a None Option
+     * 
+     * @return Option
+     */
+    function none(): Option
+    {
+        return Option::none();
+    }
+}
+
+if (!function_exists('option')) {
+    /**
+     * Create an Option from a nullable value
+     * 
+     * @param mixed|null $value
+     * @return Option
+     */
+    function option(mixed $value = null): Option
+    {
+        return Option::fromNullable($value);
+    }
+}
+
+if (!function_exists('toJsonOption')) {
+    /**
+     * Convert Option to JSON string
+     * 
+     * @param Option $option
+     * @return string
+     */
+    function toJsonOption(Option $option): string
+    {
+        return $option->toJson();
+    }
+}
+
+if (!function_exists('fromJsonOption')) {
+    /**
+     * Create Option from JSON string
+     * 
+     * @param string $json
+     * @return Option
+     */
+    function fromJsonOption(string $json): Option
+    {
+        return Option::fromJson($json);
+    }
+}
+
+// --- Result Type Helpers ---
+
+if (!function_exists('ok')) {
+    /**
+     * Create an Ok Result with a value
+     * 
+     * @param mixed $value
+     * @return Result
+     */
+    function ok(mixed $value): Result
+    {
+        return Result::ok($value);
+    }
+}
+
+if (!function_exists('err')) {
+    /**
+     * Create an Err Result with an error
+     * 
+     * @param mixed $error
+     * @return Result
+     */
+    function err(mixed $error): Result
+    {
+        return Result::err($error);
+    }
+}
+
+if (!function_exists('result')) {
+    /**
+     * Create a Result from a callable that might throw
+     * 
+     * @param callable $callable
+     * @return Result
+     */
+    function result(callable $callable): Result
+    {
+        return Result::try($callable);
+    }
+}
+
+if (!function_exists('toJsonResult')) {
+    /**
+     * Convert Result to JSON string
+     * 
+     * @param Result $result
+     * @return string
+     */
+    function toJsonResult(Result $result): string
+    {
+        return $result->toJson();
+    }
+}
+
+if (!function_exists('fromJsonResult')) {
+    /**
+     * Create Result from JSON string
+     * 
+     * @param string $json
+     * @return Result
+     */
+    function fromJsonResult(string $json): Result
+    {
+        return Result::fromJson($json);
+    }
 }
