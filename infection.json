@@ -1,0 +1,42 @@
+{
+    "timeout": 10,
+    "source": {
+        "directories": [
+            "src"
+        ]
+    },
+    "logs": {
+        "text": "build/infection.log",
+        "summary": "build/infection-summary.log",
+        "debug": "build/infection-debug.log"
+    },
+    "mutators": {
+        "@default": true,
+        "@equal": true,
+        "@identical": true,
+        "@conditional_boundary": true,
+        "@conditional_negation": true,
+        "@function_signature": true,
+        "@number": true,
+        "@operator": true,
+        "@regex": true,
+        "@return_value": true,
+        "@sort": true,
+        "@loop": true,
+        "@cast": true,
+        "@array": true,
+        "@boolean": true,
+        "@string": true
+    },
+    "testFramework": "phpunit",
+    "phpUnit": {
+        "configDir": "."
+    },
+    "ignoreMutations": [
+        "src/helpers.php"
+    ],
+    "minMsi": 80,
+    "minCoveredMsi": 80,
+    "threads": 4,
+    "tmpDir": "build/infection"
+}

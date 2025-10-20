@@ -1,0 +1,14 @@
+parameters:
+    level: 9
+    paths:
+        - src
+        - Tests
+    excludePaths:
+        - vendor
+    ignoreErrors:
+        # Ignore errors in test files for now
+        - '#Call to an undefined method.*#'
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    reportUnmatchedIgnoredErrors: false
+    tmpDir: build/phpstan
