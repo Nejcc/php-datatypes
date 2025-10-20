@@ -41,7 +41,7 @@ class Struct
         }
     }
 
-    protected function validateField(string $field, $value, $type, array $rules, bool $nullable): void
+    protected function validateField(string $field, mixed $value, string $type, array $rules, bool $nullable): void
     {
         if ($value === null && $nullable) {
             return;
@@ -51,16 +51,12 @@ class Struct
             throw new InvalidArgumentException("Field '$field' must be of type $type");
         }
         // Rules
-        foreach ($rules as $rule) {
-            if (is_callable($rule)) {
-                if (!$rule($value)) {
-                    throw new ValidationException("Validation failed for field '$field'");
-                }
-            }
+        if (!array_all($rules, fn($rule) => !is_callable($rule) || $rule($value))) {
+            throw new ValidationException("Validation failed for field '$field'");
         }
     }
 
-    protected function isValidType($value, $type): bool
+    protected function isValidType(mixed $value, string $type): bool
     {
         if ($type === 'int' || $type === 'integer') return is_int($value);
         if ($type === 'float' || $type === 'double') return is_float($value);
@@ -72,7 +68,7 @@ class Struct
         return true;
     }
 
-    public function get(string $field)
+    public function get(string $field): mixed
     {
         if (!array_key_exists($field, $this->schema)) {
             throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
@@ -142,7 +138,7 @@ class Struct
         return new self($schema, $arr);
     }
 
-    public function set(string $field, $value): void
+    public function set(string $field, mixed $value): void
     {
         if (!array_key_exists($field, $this->schema)) {
             throw new InvalidArgumentException("Field '$field' does not exist in the struct.");
@@ -158,12 +154,12 @@ class Struct
         $this->data[$field] = $value;
     }
 
-    public function __set($field, $value): void
+    public function __set(string $field, mixed $value): void
     {
         $this->set($field, $value);
     }
 
-    public function __get($field)
+    public function __get(string $field): mixed
     {
         return $this->get($field);
     }

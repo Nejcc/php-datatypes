@@ -86,17 +86,17 @@ class TypeSafeArray implements DataTypeInterface, \ArrayAccess, \Countable, \Ite
     /**
      * ArrayAccess implementation
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         return isset($this->data[$offset]);
     }
 
-    public function offsetGet($offset): mixed
+    public function offsetGet(mixed $offset): mixed
     {
         return $this->data[$offset] ?? null;
     }
 
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!$this->isValidType($value)) {
             throw new TypeMismatchException(
@@ -111,7 +111,7 @@ class TypeSafeArray implements DataTypeInterface, \ArrayAccess, \Countable, \Ite
         }
     }
 
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         unset($this->data[$offset]);
     }
@@ -254,7 +254,7 @@ class TypeSafeArray implements DataTypeInterface, \ArrayAccess, \Countable, \Ite
      *
      * @return bool True if the value matches the required type
      */
-    protected function isValidType($value): bool
+    protected function isValidType(mixed $value): bool
     {
         return $value instanceof $this->elementType;
     }
@@ -268,12 +268,11 @@ class TypeSafeArray implements DataTypeInterface, \ArrayAccess, \Countable, \Ite
      */
     private function validateArray(array $data): void
     {
-        foreach ($data as $key => $value) {
-            if (!$this->isValidType($value)) {
-                throw new TypeMismatchException(
-                    "Element at key '{$key}' must be of type {$this->elementType}"
-                );
-            }
+        if (!array_all($data, fn($value) => $this->isValidType($value))) {
+            $invalidKey = array_find_key($data, fn($value) => !$this->isValidType($value));
+            throw new TypeMismatchException(
+                "Element at key '{$invalidKey}' must be of type {$this->elementType}"
+            );
         }
     }
 }

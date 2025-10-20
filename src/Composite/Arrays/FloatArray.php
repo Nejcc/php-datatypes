@@ -43,8 +43,8 @@ final class FloatArray extends ArrayAbstraction implements \ArrayAccess
     {
         $newArray = $this->value;
         foreach ($floats as $float) {
-            $index = array_search($float, $newArray, true);
-            if ($index !== false) {
+            $index = array_find_key($newArray, fn($value) => $value === $float);
+            if ($index !== null) {
                 unset($newArray[$index]);
             }
         }

@@ -70,8 +70,8 @@ final class StringArray extends ArrayAbstraction implements ArrayAccess, Countab
     {
         $newArray = $this->value;
         foreach ($strings as $string) {
-            $index = array_search($string, $newArray, true);
-            if ($index !== false) {
+            $index = array_find_key($newArray, fn($value) => $value === $string);
+            if ($index !== null) {
                 unset($newArray[$index]);
             }
         }
@@ -87,12 +87,7 @@ final class StringArray extends ArrayAbstraction implements ArrayAccess, Countab
      */
     public function contains(string ...$strings): bool
     {
-        foreach ($strings as $string) {
-            if (!in_array($string, $this->value, true)) {
-                return false;
-            }
-        }
-        return true;
+        return array_all($strings, fn($string) => in_array($string, $this->value, true));
     }
 
     /**

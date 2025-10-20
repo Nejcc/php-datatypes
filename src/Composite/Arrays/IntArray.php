@@ -10,10 +10,9 @@ final class IntArray extends ArrayAbstraction
 {
     public function __construct(array $value)
     {
-        foreach ($value as $item) {
-            if (!is_int($item)) {
-                throw new \InvalidArgumentException("All elements must be integers.");
-            }
+        if (!array_all($value, fn($item) => is_int($item))) {
+            $invalidItem = array_find($value, fn($item) => !is_int($item));
+            throw new \InvalidArgumentException("All elements must be integers. Invalid value: " . json_encode($invalidItem));
         }
         parent::__construct($value);
     }
