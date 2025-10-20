@@ -138,4 +138,34 @@ final class Dictionary
     {
         $this->elements = [];
     }
+
+    /**
+     * Convert the dictionary to an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return $this->elements;
+    }
+
+    /**
+     * Check if the dictionary is empty.
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return empty($this->elements);
+    }
+
+    /**
+     * Get a copy of the dictionary with all elements.
+     *
+     * @return array<string, mixed>
+     */
+    public function getAll(): array
+    {
+        return $this->elements;
+    }
 }
