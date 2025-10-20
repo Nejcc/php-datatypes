@@ -79,6 +79,7 @@ abstract class AbstractBigInteger implements BigIntegerInterface
     }
 
 
+
     /**
      * @param BigIntegerInterface|NativeIntegerInterface $other
      * @param callable $operation

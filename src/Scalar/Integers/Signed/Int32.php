@@ -27,8 +27,5 @@ final class Int32 extends AbstractNativeInteger
      */
     public const MAX_VALUE = 2147483647;
 
-    public function __toString(): string
-    {
-        return (string)$this->getValue();
-    }
+
 }

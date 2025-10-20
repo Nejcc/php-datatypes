@@ -36,28 +36,25 @@ abstract class ArrayAbstraction implements \Countable, \IteratorAggregate
     // Add this for use by FloatArray and similar subclasses
     protected function validateFloats(array $array): void
     {
-        foreach ($array as $item) {
-            if (!is_float($item)) {
-                throw new \Nejcc\PhpDatatypes\Exceptions\InvalidFloatException("All elements must be floats. Invalid value: " . json_encode($item));
-            }
+        if (!array_all($array, fn($item) => is_float($item))) {
+            $invalidItem = array_find($array, fn($item) => !is_float($item));
+            throw new \Nejcc\PhpDatatypes\Exceptions\InvalidFloatException("All elements must be floats. Invalid value: " . json_encode($invalidItem));
         }
     }
 
     protected function validateStrings(array $array): void
     {
-        foreach ($array as $item) {
-            if (!is_string($item)) {
-                throw new \Nejcc\PhpDatatypes\Exceptions\InvalidStringException("All elements must be strings. Invalid value: " . json_encode($item));
-            }
+        if (!array_all($array, fn($item) => is_string($item))) {
+            $invalidItem = array_find($array, fn($item) => !is_string($item));
+            throw new \Nejcc\PhpDatatypes\Exceptions\InvalidStringException("All elements must be strings. Invalid value: " . json_encode($invalidItem));
         }
     }
 
     protected function validateBytes(array $array): void
     {
-        foreach ($array as $item) {
-            if (!is_int($item) || $item < 0 || $item > 255) {
-                throw new \Nejcc\PhpDatatypes\Exceptions\InvalidByteException("All elements must be valid bytes (0-255). Invalid value: " . $item);
-            }
+        if (!array_all($array, fn($item) => is_int($item) && $item >= 0 && $item <= 255)) {
+            $invalidItem = array_find($array, fn($item) => !is_int($item) || $item < 0 || $item > 255);
+            throw new \Nejcc\PhpDatatypes\Exceptions\InvalidByteException("All elements must be valid bytes (0-255). Invalid value: " . $invalidItem);
         }
     }
 
