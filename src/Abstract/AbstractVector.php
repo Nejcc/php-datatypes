@@ -11,9 +11,17 @@ abstract class AbstractVector implements DataTypeInterface
 {
     protected array $components;
 
-    public function __construct(array $components)
+    /**
+     * @param array $components
+     * @param bool $trusted Internal use only. When true, skips component validation.
+     *                     Used by arithmetic ops whose result is known to be valid
+     *                     (same dimension, all numeric) by construction.
+     */
+    public function __construct(array $components, bool $trusted = false)
     {
-        $this->validateComponents($components);
+        if (!$trusted) {
+            $this->validateComponents($components);
+        }
         $this->components = $components;
     }
 
@@ -29,7 +37,11 @@ abstract class AbstractVector implements DataTypeInterface
 
     public function magnitude(): float
     {
-        return sqrt(array_sum(array_map(fn ($component) => $component ** 2, $this->components)));
+        $sum = 0.0;
+        foreach ($this->components as $c) {
+            $sum += $c * $c;
+        }
+        return sqrt($sum);
     }
 
     public function normalize(): self
@@ -39,8 +51,11 @@ abstract class AbstractVector implements DataTypeInterface
             throw new InvalidArgumentException("Cannot normalize a zero vector");
         }
 
-        $normalized = array_map(fn ($component) => $component / $magnitude, $this->components);
-        return new static($normalized);
+        $result = [];
+        foreach ($this->components as $i => $c) {
+            $result[$i] = $c / $magnitude;
+        }
+        return new static($result, true);
     }
 
     public function dot(self $other): float
@@ -49,11 +64,12 @@ abstract class AbstractVector implements DataTypeInterface
             throw new InvalidArgumentException("Cannot calculate dot product of vectors with different dimensions");
         }
 
-        return array_sum(array_map(
-            fn ($a, $b) => $a * $b,
-            $this->components,
-            $other->components
-        ));
+        $sum = 0.0;
+        $b = $other->components;
+        foreach ($this->components as $i => $a) {
+            $sum += $a * $b[$i];
+        }
+        return $sum;
     }
 
     public function add(self $other): self
@@ -62,13 +78,12 @@ abstract class AbstractVector implements DataTypeInterface
             throw new InvalidArgumentException("Cannot add vectors with different dimensions");
         }
 
-        $result = array_map(
-            fn ($a, $b) => $a + $b,
-            $this->components,
-            $other->components
-        );
-
-        return new static($result);
+        $result = [];
+        $b = $other->components;
+        foreach ($this->components as $i => $a) {
+            $result[$i] = $a + $b[$i];
+        }
+        return new static($result, true);
     }
 
     public function subtract(self $other): self
@@ -77,23 +92,21 @@ abstract class AbstractVector implements DataTypeInterface
             throw new InvalidArgumentException("Cannot subtract vectors with different dimensions");
         }
 
-        $result = array_map(
-            fn ($a, $b) => $a - $b,
-            $this->components,
-            $other->components
-        );
-
-        return new static($result);
+        $result = [];
+        $b = $other->components;
+        foreach ($this->components as $i => $a) {
+            $result[$i] = $a - $b[$i];
+        }
+        return new static($result, true);
     }
 
     public function scale(float $scalar): self
     {
-        $result = array_map(
-            fn ($component) => $component * $scalar,
-            $this->components
-        );
-
-        return new static($result);
+        $result = [];
+        foreach ($this->components as $i => $c) {
+            $result[$i] = $c * $scalar;
+        }
+        return new static($result, true);
     }
 
     public function getComponent(int $index): float
@@ -119,13 +132,13 @@ abstract class AbstractVector implements DataTypeInterface
             throw new InvalidArgumentException("Cannot calculate distance between vectors with different dimensions");
         }
 
-        $squaredDiff = array_map(
-            fn ($a, $b) => ($a - $b) ** 2,
-            $this->components,
-            $other->components
-        );
-
-        return sqrt(array_sum($squaredDiff));
+        $sum = 0.0;
+        $b = $other->components;
+        foreach ($this->components as $i => $a) {
+            $diff = $a - $b[$i];
+            $sum += $diff * $diff;
+        }
+        return sqrt($sum);
     }
 
     abstract protected function validateComponents(array $components): void;
