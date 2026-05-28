@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Tests\Integers\Signed;
 use Nejcc\PhpDatatypes\Scalar\Integers\Signed\Int32;
 use PHPUnit\Framework\TestCase;
 
-class Int32Test extends TestCase
+final class Int32Test extends TestCase
 {
     public function testValidInitialization()
     {

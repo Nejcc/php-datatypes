@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Nejcc\PhpDatatypes\Composite\Struct\Struct;
 
 include_once __DIR__ . '/../vendor/autoload.php';

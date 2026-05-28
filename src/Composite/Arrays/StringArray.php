@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Arrays;
@@ -6,44 +7,39 @@ namespace Nejcc\PhpDatatypes\Composite\Arrays;
 use ArrayAccess;
 use Countable;
 use IteratorAggregate;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
-use Traversable;
 
-readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
+final class StringArray extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * The array of string values.
      *
      * @var array
      */
-    private array $value;
+    protected array $value;
 
     /**
      * Create a new StringArray instance.
      *
      * @param array $value
+     *
      * @throws InvalidStringException
      */
-    public function __construct(array $value = [])
+    public function __construct(array $value = [], bool $trusted = false)
     {
-        $this->validateArray($value);
+        if (!$trusted) {
+            $this->validateStrings($value);
+        }
         $this->value = $value;
     }
 
     /**
-     * Validates that the array consists only of strings.
-     *
-     * @param array $array
-     * @return void
-     * @throws InvalidStringException
+     * Construct without validation. Caller must guarantee every element is a string.
      */
-    private function validateArray(array $array): void
+    public static function fromTrusted(array $value): self
     {
-        foreach ($array as $item) {
-            if (!is_string($item)) {
-                throw new InvalidStringException("All elements must be strings. Invalid value: " . json_encode($item));
-            }
-        }
+        return new self($value, true);
     }
 
     /**
@@ -60,12 +56,14 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Add multiple strings to the array (returns a new instance).
      *
      * @param string ...$strings
+     *
      * @return self New instance with added values.
+     *
      * @throws InvalidStringException
      */
     public function add(string ...$strings): self
     {
-        $this->validateArray($strings);
+        $this->validateStrings($strings);
         return new self(array_merge($this->value, $strings));
     }
 
@@ -73,15 +71,17 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Remove multiple strings from the array (returns a new instance).
      *
      * @param string ...$strings
+     *
      * @return self New instance with removed values.
+     *
      * @throws InvalidStringException
      */
     public function remove(string ...$strings): self
     {
         $newArray = $this->value;
         foreach ($strings as $string) {
-            $index = array_search($string, $newArray, true);
-            if ($index !== false) {
+            $index = array_find_key($newArray, fn($value) => $value === $string);
+            if ($index !== null) {
                 unset($newArray[$index]);
             }
         }
@@ -92,16 +92,12 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Check if multiple strings exist in the array.
      *
      * @param string ...$strings
+     *
      * @return bool True if all strings are found, false otherwise.
      */
     public function contains(string ...$strings): bool
     {
-        foreach ($strings as $string) {
-            if (!in_array($string, $this->value, true)) {
-                return false;
-            }
-        }
-        return true;
+        return array_all($strings, fn($string) => in_array($string, $this->value, true));
     }
 
     /**
@@ -118,6 +114,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Get the array as a comma-separated string or with custom separator.
      *
      * @param string $separator Separator to use between strings (default: ", ").
+     *
      * @return string
      */
     public function toString(string $separator = ', '): string
@@ -129,11 +126,12 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Find strings that start with a specific prefix.
      *
      * @param string $prefix
+     *
      * @return array Array of strings that start with the given prefix.
      */
     public function filterByPrefix(string $prefix): array
     {
-        return array_values(array_filter($this->value, fn($str) => str_starts_with($str, $prefix)));
+        return array_values(array_filter($this->value, fn ($str) => str_starts_with($str, $prefix)));
     }
 
 
@@ -141,11 +139,12 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Find strings that contain a specific substring.
      *
      * @param string $substring
+     *
      * @return array Array of strings that contain the substring.
      */
     public function filterBySubstring(string $substring): array
     {
-        return array_values(array_filter($this->value, fn($str) => str_contains($str, $substring)));
+        return array_values(array_filter($this->value, fn ($str) => str_contains($str, $substring)));
     }
 
 
@@ -153,6 +152,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Get a string at a specific index.
      *
      * @param int $index
+     *
      * @return string|null
      */
     public function get(int $index): ?string
@@ -164,6 +164,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Convert all strings to uppercase (returns a new instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function toUpperCase(): self
@@ -175,6 +176,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Convert all strings to lowercase (returns a new instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function toLowerCase(): self
@@ -186,6 +188,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * Clear the array (returns a new empty instance).
      *
      * @return self
+     *
      * @throws InvalidStringException
      */
     public function clear(): self
@@ -197,6 +200,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * ArrayAccess method to check if an offset exists.
      *
      * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists(mixed $offset): bool
@@ -208,6 +212,7 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * ArrayAccess method to get an offset.
      *
      * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
@@ -220,7 +225,9 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @return void
+     *
      * @throws InvalidStringException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -232,7 +239,9 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
      * ArrayAccess method to unset an offset (immutable, returns a new instance).
      *
      * @param mixed $offset
+     *
      * @return void
+     *
      * @throws InvalidStringException
      */
     public function offsetUnset(mixed $offset): void
@@ -243,9 +252,9 @@ readonly class StringArray implements ArrayAccess, Countable, IteratorAggregate
     /**
      * Returns an iterator for traversing the array.
      *
-     * @return Traversable
+     * @return \ArrayIterator
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->value);
     }

@@ -31,14 +31,14 @@ try {
         'output' => "Json1: " . $json1->getJson() . "\nJson2: " . $json2->getJson(),
     ];
 
-//    // 2. Compare Json instances
-//    $areEqual = $json1->compareWith($json2) ? 'Yes' : 'No';
-//    $examples[] = [
-//        'title' => 'Compare Json Instances',
-//        'description' => 'We compare <code>json1</code> and <code>json2</code> to check if they are identical.',
-//        'code' => "\$areEqual = \$json1->compareWith(\$json2) ? 'Yes' : 'No';",
-//        'output' => "Are Json1 and Json2 identical? " . $areEqual,
-//    ];
+    //    // 2. Compare Json instances
+    //    $areEqual = $json1->compareWith($json2) ? 'Yes' : 'No';
+    //    $examples[] = [
+    //        'title' => 'Compare Json Instances',
+    //        'description' => 'We compare <code>json1</code> and <code>json2</code> to check if they are identical.',
+    //        'code' => "\$areEqual = \$json1->compareWith(\$json2) ? 'Yes' : 'No';",
+    //        'output' => "Are Json1 and Json2 identical? " . $areEqual,
+    //    ];
 
     // 3. Serialize Json to Array
     $array1 = $json1->toArray();
@@ -58,7 +58,7 @@ try {
         'output' => "Json from Array: " . $jsonFromArray->getJson(),
     ];
 
-//    // 5. Compress Json1 using HuffmanEncoding
+    //    // 5. Compress Json1 using HuffmanEncoding
     $huffmanEncoder = new HuffmanEncoding();
     $compressed = $json1->compress($huffmanEncoder);
     $examples[] = [
@@ -68,7 +68,7 @@ try {
         'output' => "Compressed Json1 (hex): " . bin2hex($compressed),
     ];
 
-//    // 6. Decompress the previously compressed data
+    //    // 6. Decompress the previously compressed data
     $decompressedJson = $json1->decompress($huffmanEncoder, $compressed);
     $examples[] = [
         'title' => 'Decompress the Compressed Data',
@@ -85,7 +85,7 @@ try {
         'code' => "\$isMatch = (\$json1->toArray() === \$decompressedJson->toArray()) ? 'Yes' : 'No';",
         'output' => "Does decompressed Json match original Json1? " . $isMatch,
     ];
-//
+    //
     // 8. Update Json1 by adding a new user
     $updatedJson1 = $json1->update('users', array_merge($json1->toArray()['users'], [['id' => 5, 'name' => 'Eve']]));
     $examples[] = [
@@ -94,7 +94,7 @@ try {
         'code' => "\$updatedJson1 = \$json1->update('users', array_merge(\$json1->toArray()['users'], [['id' => 5, 'name' => 'Eve']]));",
         'output' => "Updated Json1: " . $updatedJson1->getJson(),
     ];
-//
+    //
     // 9. Remove a user from updated Json1
     $modifiedJson1 = $updatedJson1->remove('users', 2); // Assuming remove method removes by 'id' or index
     $examples[] = [

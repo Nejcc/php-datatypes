@@ -22,6 +22,7 @@ interface StringInterface
      * Compare two strings.
      *
      * @param StringInterface $other
+     *
      * @return int
      */
     public function compare(StringInterface $other): int;
@@ -30,6 +31,7 @@ interface StringInterface
      * Append another string.
      *
      * @param StringInterface $other
+     *
      * @return static
      */
     public function append(StringInterface $other): static;
@@ -39,6 +41,7 @@ interface StringInterface
      *
      * @param int $start
      * @param int|null $length
+     *
      * @return static
      */
     public function substring(int $start, ?int $length = null): static;
@@ -47,6 +50,7 @@ interface StringInterface
      * Check if string contains another string.
      *
      * @param StringInterface $needle
+     *
      * @return bool
      */
     public function contains(StringInterface $needle): bool;

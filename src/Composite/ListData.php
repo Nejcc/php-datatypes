@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite;
 
 use OutOfBoundsException;
 
-class ListData
+final class ListData
 {
     /**
      * The array that stores the list elements.
@@ -18,6 +19,7 @@ class ListData
      * Create a new ListData instance.
      *
      * @param array<int, mixed> $elements
+     *
      * @return void
      */
     public function __construct(array $elements = [])
@@ -29,6 +31,7 @@ class ListData
      * Add an element to the list.
      *
      * @param mixed $element
+     *
      * @return void
      */
     public function add(mixed $element): void
@@ -40,7 +43,9 @@ class ListData
      * Remove an element by its index.
      *
      * @param int $index
+     *
      * @throws OutOfBoundsException
+     *
      * @return void
      */
     public function remove(int $index): void
@@ -56,7 +61,9 @@ class ListData
      * Get an element by its index.
      *
      * @param int $index
+     *
      * @throws OutOfBoundsException
+     *
      * @return mixed
      */
     public function get(int $index): mixed
@@ -82,6 +89,7 @@ class ListData
      * Check if the list contains an element.
      *
      * @param mixed $element
+     *
      * @return bool
      */
     public function contains(mixed $element): bool

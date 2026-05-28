@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Composite\Union;
 
 use InvalidArgumentException;
@@ -35,6 +37,7 @@ final class Union
      * Create a new Union instance with allowed types.
      *
      * @param array $allowedTypes
+     *
      * @return void
      */
     public function __construct(array $allowedTypes)
@@ -46,6 +49,7 @@ final class Union
      * Set the value of the union, validating the type.
      *
      * @param mixed $value
+     *
      * @return void
      *
      * @throws InvalidArgumentException
@@ -67,9 +71,42 @@ final class Union
     }
 
     /**
+     * Determine if the current value is of a specific type.
+     *
+     * @param string $type
+     *
+     * @return bool
+     */
+    public function isType(string $type): bool
+    {
+        $actualType = gettype($this->value);
+
+        // Map to shorthand if applicable
+        $shorthandType = array_search($actualType, self::$typeMap, true);
+        $actualType = $shorthandType ?: $actualType;
+
+        return $actualType === $type || $this->value instanceof $type;
+    }
+
+    /**
+     * Add a new type to the allowed types of the union.
+     *
+     * @param string $type
+     *
+     * @return void
+     */
+    public function addAllowedType(string $type): void
+    {
+        if (!in_array($type, $this->allowedTypes, true)) {
+            $this->allowedTypes[] = $type;
+        }
+    }
+
+    /**
      * Validate the type of the value against allowed types.
      *
      * @param mixed $value
+     *
      * @return void
      *
      * @throws InvalidArgumentException
@@ -96,36 +133,6 @@ final class Union
             throw new InvalidArgumentException(
                 "Invalid type: $type. Allowed types: " . implode(', ', $this->allowedTypes)
             );
-        }
-    }
-
-    /**
-     * Determine if the current value is of a specific type.
-     *
-     * @param string $type
-     * @return bool
-     */
-    public function isType(string $type): bool
-    {
-        $actualType = gettype($this->value);
-
-        // Map to shorthand if applicable
-        $shorthandType = array_search($actualType, self::$typeMap, true);
-        $actualType = $shorthandType ?: $actualType;
-
-        return $actualType === $type || $this->value instanceof $type;
-    }
-
-    /**
-     * Add a new type to the allowed types of the union.
-     *
-     * @param string $type
-     * @return void
-     */
-    public function addAllowedType(string $type): void
-    {
-        if (!in_array($type, $this->allowedTypes, true)) {
-            $this->allowedTypes[] = $type;
         }
     }
 }

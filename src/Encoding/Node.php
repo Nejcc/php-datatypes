@@ -8,7 +8,7 @@ namespace Nejcc\PhpDatatypes\Encoding;
  * Class Node
  * Represents a node in the Huffman tree.
  */
-class Node
+final class Node
 {
     public string $character;
     public int $frequency;

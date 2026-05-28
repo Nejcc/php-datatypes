@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Abstract;
 
+use Nejcc\PhpDatatypes\Attributes\Range;
 use Nejcc\PhpDatatypes\Interfaces\NativeIntegerInterface;
-use Nejcc\PhpDatatypes\Traits\ArithmeticOperationsTrait;
-use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
+use Nejcc\PhpDatatypes\Traits\NativeArithmeticOperationsTrait;
+use Nejcc\PhpDatatypes\Traits\NativeIntegerComparisonTrait;
 
 /**
  * Abstract class for native integer types.
@@ -15,24 +16,55 @@ use Nejcc\PhpDatatypes\Traits\IntegerComparisonTrait;
  */
 abstract class AbstractNativeInteger implements NativeIntegerInterface
 {
-    use ArithmeticOperationsTrait;
-    use IntegerComparisonTrait;
-
-    protected readonly int $value;
+    use NativeArithmeticOperationsTrait;
+    use NativeIntegerComparisonTrait;
 
     public const MIN_VALUE = null;
     public const MAX_VALUE = null;
 
+    protected readonly int $value;
+
     /**
      * @param int $value
+     * @param bool $trusted Internal use only. When true, skips MIN/MAX validation.
+     *                     Callers must guarantee the value is already within range
+     *                     (used by arithmetic ops that pre-check the result).
      */
-    public function __construct(int $value)
+    public function __construct(int $value, bool $trusted = false)
     {
+        if ($trusted) {
+            $this->value = $value;
+            return;
+        }
         $this->setValue($value);
+    }
+
+    public function __toString(): string
+    {
+        return (string)$this->value;
+    }
+
+    /**
+     * @return int
+     */
+    final public function getValue(): int
+    {
+        return $this->value;
+    }
+
+    /**
+     * @param NativeIntegerInterface $other
+     *
+     * @return int
+     */
+    final public function compare(NativeIntegerInterface $other): int
+    {
+        return $this->value <=> $other->getValue();
     }
 
     /**
      * @param int $value
+     *
      * @return void
      */
     protected function setValue(int $value): void
@@ -46,105 +78,5 @@ abstract class AbstractNativeInteger implements NativeIntegerInterface
         }
 
         $this->value = $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getValue(): int
-    {
-        return $this->value;
-    }
-
-    /**
-     * @param NativeIntegerInterface $other
-     * @return int
-     */
-    public function compare(NativeIntegerInterface $other): int
-    {
-        return $this->value <=> $other->getValue();
-    }
-
-    /**
-     * @param NativeIntegerInterface $other
-     * @param callable $operation
-     * @param string $operationName
-     * @return $this
-     */
-    protected function performOperation(
-        NativeIntegerInterface $other,
-        callable $operation,
-        string $operationName
-    ): static {
-        $result = $operation($this->value, $other->getValue());
-
-        if ($result < static::MIN_VALUE || $result > static::MAX_VALUE) {
-            $exceptionClass = $result > static::MAX_VALUE ? \OverflowException::class : \UnderflowException::class;
-            throw new $exceptionClass('Result is out of bounds.');
-        }
-
-        return new static($result);
-    }
-
-    /**
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function addValues(int $a, int $b): int
-    {
-        return $a + $b;
-    }
-
-    /**
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function subtractValues(int $a, int $b): int
-    {
-        return $a - $b;
-    }
-
-    /**
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function multiplyValues(int $a, int $b): int
-    {
-        return $a * $b;
-    }
-
-    /**
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function divideValues(int $a, int $b): int
-    {
-        if ($b === 0) {
-            throw new \DivisionByZeroError('Division by zero.');
-        }
-
-        if ($a % $b !== 0) {
-            throw new \UnexpectedValueException('Division result is not an integer.');
-        }
-
-        return intdiv($a, $b);
-    }
-
-    /**
-     * @param int $a
-     * @param int $b
-     * @return int
-     */
-    protected function modValues(int $a, int $b): int
-    {
-        if ($b === 0) {
-            throw new \DivisionByZeroError('Division by zero.');
-        }
-
-        return $a % $b;
     }
 }

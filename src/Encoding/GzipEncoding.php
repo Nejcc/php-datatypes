@@ -11,12 +11,13 @@ use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
  * Class GzipEncoding
  * Implements Gzip compression.
  */
-class GzipEncoding implements EncoderInterface, DecoderInterface
+final class GzipEncoding implements DecoderInterface, EncoderInterface
 {
     /**
      * Encodes the data using Gzip.
      *
      * @param string $data
+     *
      * @return string
      */
     public function encode(string $data): string
@@ -32,6 +33,7 @@ class GzipEncoding implements EncoderInterface, DecoderInterface
      * Decodes the data using Gzip.
      *
      * @param string $data
+     *
      * @return string
      */
     public function decode(string $data): string

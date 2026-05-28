@@ -11,12 +11,13 @@ use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
  * Class Base64Encoding
  * Implements Base64 encoding.
  */
-class Base64Encoding implements EncoderInterface, DecoderInterface
+final class Base64Encoding implements DecoderInterface, EncoderInterface
 {
     /**
      * Encodes the data using Base64.
      *
      * @param string $data
+     *
      * @return string
      */
     public function encode(string $data): string
@@ -28,6 +29,7 @@ class Base64Encoding implements EncoderInterface, DecoderInterface
      * Decodes the data using Base64.
      *
      * @param string $data
+     *
      * @return string
      */
     public function decode(string $data): string

@@ -18,42 +18,49 @@ interface NativeIntegerInterface
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return $this
      */
     public function add(NativeIntegerInterface $other): static;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return $this
      */
     public function subtract(NativeIntegerInterface $other): static;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return $this
      */
     public function multiply(NativeIntegerInterface $other): static;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return $this
      */
     public function divide(NativeIntegerInterface $other): static;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return $this
      */
     public function mod(NativeIntegerInterface $other): static;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return bool
      */
     public function equals(NativeIntegerInterface $other): bool;
 
     /**
      * @param NativeIntegerInterface $other
+     *
      * @return int
      */
     public function compare(NativeIntegerInterface $other): int;

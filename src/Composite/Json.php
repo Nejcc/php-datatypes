@@ -6,15 +6,15 @@ namespace Nejcc\PhpDatatypes\Composite;
 
 use InvalidArgumentException;
 use JsonException;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 use Nejcc\PhpDatatypes\Interfaces\DecoderInterface;
 use Nejcc\PhpDatatypes\Interfaces\EncoderInterface;
-
 
 /**
  * Class Json
  * A strict and immutable type for handling JSON data with advanced features.
  */
-final class Json
+final class Json extends ArrayAbstraction
 {
     /**
      * @var string The JSON string.
@@ -36,6 +36,7 @@ final class Json
      *
      * @param string $json The JSON string.
      * @param string|null $schema Optional JSON schema for validation.
+     *
      * @throws InvalidArgumentException If the JSON is invalid or does not comply with the schema.
      */
     public function __construct(string $json, ?string $schema = null)
@@ -43,28 +44,14 @@ final class Json
         $this->validateJson($json);
         $this->schema = $schema;
         $this->json = $json;
+        parent::__construct([]); // Not used, but required by ArrayAbstraction
     }
-
-    /**
-     * Validates if a string is valid JSON.
-     *
-     * @param string $json
-     * @throws InvalidArgumentException
-     */
-    private function validateJson(string $json): void
-    {
-        try {
-            json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-        } catch (JsonException $e) {
-            throw new InvalidArgumentException('Invalid JSON provided: ' . $e->getMessage());
-        }
-    }
-
 
     /**
      * Serializes the JSON data to an array.
      *
      * @return array
+     *
      * @throws JsonException
      */
     public function toArray(): array
@@ -80,6 +67,7 @@ final class Json
      * Serializes the JSON data to an object.
      *
      * @return object
+     *
      * @throws JsonException
      */
     public function toObject(): object
@@ -92,7 +80,9 @@ final class Json
      *
      * @param array $data
      * @param string|null $schema
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      * @throws JsonException
      */
@@ -107,7 +97,9 @@ final class Json
      *
      * @param object $object
      * @param string|null $schema
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      * @throws JsonException
      */
@@ -131,6 +123,7 @@ final class Json
      * Compresses the JSON string using the provided encoder.
      *
      * @param EncoderInterface $encoder
+     *
      * @return string The compressed string.
      */
     public function compress(EncoderInterface $encoder): string
@@ -143,7 +136,9 @@ final class Json
      *
      * @param DecoderInterface $decoder
      * @param string $compressed
+     *
      * @return self
+     *
      * @throws InvalidArgumentException
      */
     public static function decompress(DecoderInterface $decoder, string $compressed): self
@@ -157,7 +152,9 @@ final class Json
      * In case of conflicting keys, values from the other Json take precedence.
      *
      * @param Json $other
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function merge(Json $other): self
@@ -172,7 +169,9 @@ final class Json
      *
      * @param string $key
      * @param mixed $value
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function update(string $key, mixed $value): self
@@ -187,7 +186,9 @@ final class Json
      * Removes a key from the JSON data.
      *
      * @param string $key
+     *
      * @return self
+     *
      * @throws JsonException
      */
     public function remove(string $key): self

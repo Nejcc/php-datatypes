@@ -49,6 +49,33 @@ final class TestExamples
     }
 
     /**
+     * Retrieve all example data as an array.
+     * This method returns the initialized scalar, composite, and structured data.
+     * Can be used to display or process the data in various parts of the system.
+     *
+     * @return array
+     */
+    public function getExamples(): array
+    {
+        return [
+            'years'             => $this->years,
+            'account_number'    => $this->account_number,
+            'account_balance'   => $this->account_balance,
+            'investment_amount' => $this->investment_amount,
+            'grade'             => $this->grade,
+            'age'               => $this->age,
+            'names'             => $this->names,
+            'scores'            => $this->scores,
+            'weights'           => $this->weights,
+            'data'              => $this->data,
+            'listData'          => $this->listData,
+            'dictionary'        => $this->dictionary,
+            'struct'            => $this->struct,
+            'struct_all'        => $this->struct->getFields(), // All fields in the struct
+        ];
+    }
+
+    /**
      * Initialize scalar data types.
      * Scalar types represent individual values like numbers, bytes, and characters.
      * They are used to handle simple and atomic values within the system.
@@ -181,33 +208,6 @@ final class TestExamples
         $this->struct->set('age', null);
         $this->struct->set('balance', 250.75);
     }
-
-    /**
-     * Retrieve all example data as an array.
-     * This method returns the initialized scalar, composite, and structured data.
-     * Can be used to display or process the data in various parts of the system.
-     *
-     * @return array
-     */
-    public function getExamples(): array
-    {
-        return [
-            'years'             => $this->years,
-            'account_number'    => $this->account_number,
-            'account_balance'   => $this->account_balance,
-            'investment_amount' => $this->investment_amount,
-            'grade'             => $this->grade,
-            'age'               => $this->age,
-            'names'             => $this->names,
-            'scores'            => $this->scores,
-            'weights'           => $this->weights,
-            'data'              => $this->data,
-            'listData'          => $this->listData,
-            'dictionary'        => $this->dictionary,
-            'struct'            => $this->struct,
-            'struct_all'        => $this->struct->getFields(), // All fields in the struct
-        ];
-    }
 }
 
 // Instantiate the class and invoke the examples
@@ -215,4 +215,3 @@ $example = new TestExamples();
 
 // Display the example data
 var_dump($example->getExamples());
-

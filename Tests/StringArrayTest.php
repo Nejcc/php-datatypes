@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Tests;
@@ -7,7 +8,7 @@ use Nejcc\PhpDatatypes\Composite\Arrays\StringArray;
 use Nejcc\PhpDatatypes\Exceptions\InvalidStringException;
 use PHPUnit\Framework\TestCase;
 
-class StringArrayTest extends TestCase
+final class StringArrayTest extends TestCase
 {
     public function testCreateValidStringArray(): void
     {

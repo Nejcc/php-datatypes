@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Interfaces;
 
 interface StructInterface
@@ -9,6 +11,7 @@ interface StructInterface
      *
      * @param string $name The field name.
      * @param mixed $value The value to set.
+     *
      * @return void
      */
     public function set(string $name, mixed $value): void;
@@ -17,6 +20,7 @@ interface StructInterface
      * Get the value of a field.
      *
      * @param string $name The field name.
+     *
      * @return mixed The field value.
      */
     public function get(string $name): mixed;

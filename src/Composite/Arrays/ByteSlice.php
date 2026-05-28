@@ -1,47 +1,43 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Composite\Arrays;
 
-use Countable;
 use ArrayAccess;
+use Countable;
 use IteratorAggregate;
-use Traversable;
+use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 use Nejcc\PhpDatatypes\Exceptions\InvalidByteException;
 
-readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
+final class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable, IteratorAggregate
 {
     /**
      * @var array<int> The byte values (0-255).
      */
-    private array $value;
+    protected array $value;
 
     /**
      * Constructor for ByteSlice.
      *
      * @param array<int> $value The array of byte values.
+     *
      * @throws InvalidByteException If any value is not a valid byte.
      */
-    public function __construct(array $value)
+    public function __construct(array $value, bool $trusted = false)
     {
-        $this->validateBytes($value);
+        if (!$trusted) {
+            $this->validateBytes($value);
+        }
         $this->value = $value;
     }
 
     /**
-     * Validate that all elements are valid bytes (0-255).
-     *
-     * @param array $array The array to validate.
-     * @throws InvalidByteException If any element is not a valid byte.
-     * @return void
+     * Construct without validation. Caller must guarantee every element is an int in 0..255.
      */
-    private function validateBytes(array $array): void
+    public static function fromTrusted(array $value): self
     {
-        foreach ($array as $item) {
-            if (!is_int($item) || $item < 0 || $item > 255) {
-                throw new InvalidByteException("All elements must be valid bytes (0-255). Invalid value: " . $item);
-            }
-        }
+        return new self($value, true);
     }
 
     /**
@@ -58,6 +54,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      * Get the byte at a specific index.
      *
      * @param int $index The index.
+     *
      * @return int|null The byte value or null if index is out of bounds.
      */
     public function getByte(int $index): ?int
@@ -82,7 +79,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      */
     public function toHex(): string
     {
-        return implode('', array_map(fn($byte) => sprintf('%02X', $byte), $this->value));
+        return implode('', array_map(fn ($byte) => sprintf('%02X', $byte), $this->value));
     }
 
     /**
@@ -90,7 +87,9 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      *
      * @param int $offset The start offset.
      * @param int|null $length The length of the slice.
+     *
      * @return ByteSlice The sliced byte array.
+     *
      * @throws InvalidByteException
      */
     public function slice(int $offset, ?int $length = null): self
@@ -102,7 +101,9 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      * Merge the current byte array with another byte array.
      *
      * @param ByteSlice $other The other byte array to merge.
+     *
      * @return ByteSlice A new ByteSlice instance containing the merged bytes.
+     *
      * @throws InvalidByteException
      */
     public function merge(ByteSlice $other): self
@@ -114,6 +115,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      * ArrayAccess: Check if a byte exists at the given offset.
      *
      * @param int $offset The array offset.
+     *
      * @return bool True if offset exists, false otherwise.
      */
     public function offsetExists(mixed $offset): bool
@@ -125,6 +127,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      * ArrayAccess: Get the byte at the given offset.
      *
      * @param int $offset The array offset.
+     *
      * @return mixed The byte value at the given offset.
      */
     public function offsetGet(mixed $offset): mixed
@@ -137,6 +140,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      *
      * @param int $offset The array offset.
      * @param mixed $value The value to set (not allowed).
+     *
      * @throws InvalidByteException Always thrown since ByteSlice is immutable.
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -148,6 +152,7 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
      * ArrayAccess: Prevent unsetting by throwing an exception.
      *
      * @param int $offset The array offset.
+     *
      * @throws InvalidByteException Always thrown since ByteSlice is immutable.
      */
     public function offsetUnset(mixed $offset): void
@@ -158,9 +163,9 @@ readonly class ByteSlice implements Countable, ArrayAccess, IteratorAggregate
     /**
      * Get an iterator for the byte array.
      *
-     * @return Traversable An iterator for the byte array.
+     * @return \ArrayIterator An iterator for the byte array.
      */
-    public function getIterator(): Traversable
+    public function getIterator(): \ArrayIterator
     {
         return new \ArrayIterator($this->value);
     }

@@ -171,7 +171,7 @@ enum HttpStatusCode: int
      */
     public static function getSuccessCodes(): array
     {
-        return array_filter(self::cases(), fn($case) => $case->isSuccess());
+        return array_filter(self::cases(), fn ($case) => $case->isSuccess());
     }
 
     /**
@@ -179,6 +179,6 @@ enum HttpStatusCode: int
      */
     public static function getClientErrorCodes(): array
     {
-        return array_filter(self::cases(), fn($case) => $case->isClientError());
+        return array_filter(self::cases(), fn ($case) => $case->isClientError());
     }
 }

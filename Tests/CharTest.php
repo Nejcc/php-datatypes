@@ -7,7 +7,7 @@ namespace Nejcc\PhpDatatypes\Tests;
 use Nejcc\PhpDatatypes\Scalar\Char;
 use PHPUnit\Framework\TestCase;
 
-class CharTest extends TestCase
+final class CharTest extends TestCase
 {
     /**
      * Test that the constructor throws an exception for a string longer than 1 character.

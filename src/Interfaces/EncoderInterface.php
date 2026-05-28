@@ -14,6 +14,7 @@ interface EncoderInterface
      * Encodes the given data.
      *
      * @param string $data
+     *
      * @return string The encoded data.
      */
     public function encode(string $data): string;

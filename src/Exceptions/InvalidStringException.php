@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Exceptions;
 
 use Exception;
 use Throwable;
 
-class InvalidStringException extends Exception
+final class InvalidStringException extends Exception
 {
     /**
      * @var mixed The invalid value that caused the exception.
@@ -20,7 +22,7 @@ class InvalidStringException extends Exception
      * @param int $code Optional exception code.
      * @param Throwable|null $previous Previous throwable for chaining exceptions.
      */
-    public function __construct($invalidValue, string $message = null, int $code = 0, ?Throwable $previous = null)
+    public function __construct($invalidValue, ?string $message = null, int $code = 0, ?Throwable $previous = null)
     {
         $this->invalidValue = $invalidValue;
 
@@ -31,16 +33,6 @@ class InvalidStringException extends Exception
     }
 
     /**
-     * Get the invalid value that caused the exception.
-     *
-     * @return mixed The invalid value.
-     */
-    public function getInvalidValue(): mixed
-    {
-        return $this->invalidValue;
-    }
-
-    /**
      * String representation of the exception, including the invalid value.
      *
      * @return string
@@ -48,5 +40,15 @@ class InvalidStringException extends Exception
     public function __toString(): string
     {
         return __CLASS__ . ": [{$this->code}]: {$this->message}. Invalid value: " . json_encode($this->invalidValue) . "\n";
+    }
+
+    /**
+     * Get the invalid value that caused the exception.
+     *
+     * @return mixed The invalid value.
+     */
+    public function getInvalidValue(): mixed
+    {
+        return $this->invalidValue;
     }
 }

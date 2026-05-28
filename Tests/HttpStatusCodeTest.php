@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Nejcc\PhpDatatypes\Tests;
-
-
 
 use Nejcc\PhpDatatypes\Enums\Http\HttpStatusCode;
 use PHPUnit\Framework\TestCase;
 
-class HttpStatusCodeTest extends TestCase
+final class HttpStatusCodeTest extends TestCase
 {
     public function testIsInformational()
     {

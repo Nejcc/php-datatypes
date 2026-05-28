@@ -1,11 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Nejcc\PhpDatatypes\Exceptions;
 
 use Exception;
 
-class InvalidFloatException extends Exception
+final class InvalidFloatException extends Exception
 {
     /**
      * Constructor for InvalidFloatException.
