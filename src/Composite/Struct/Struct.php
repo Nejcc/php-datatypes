@@ -12,10 +12,22 @@ class Struct
     protected array $data = [];
     protected array $schema = [];
 
-    public function __construct(array $schema, array $values = [])
+    /**
+     * @param array|CompiledSchema $schema Raw schema array, or a pre-compiled
+     *                                     schema. The compiled form skips the
+     *                                     per-construction normalisation work
+     *                                     and is faster when the same schema
+     *                                     is used for many instances.
+     */
+    public function __construct(array|CompiledSchema $schema, array $values = [])
     {
-        // Backward compatibility: convert old format ['id' => 'int', ...] to new format
-        // Fast path: peek first entry without resetting the array pointer.
+        if ($schema instanceof CompiledSchema) {
+            $this->initFromCompiled($schema, $values);
+            return;
+        }
+
+        // Raw-array path: skip the intermediate CompiledSchema allocation
+        // for one-shot callers.
         $firstKey = array_key_first($schema);
         if ($firstKey !== null && is_string($schema[$firstKey])) {
             $newSchema = [];
@@ -31,9 +43,6 @@ class Struct
             $default = $def['default'] ?? null;
             $rules = $def['rules'] ?? [];
 
-            // Resolve value: explicit field, then alias, then default.
-            // isset() short-circuits the array_key_exists call on the common
-            // non-null path; only fall through for missing-or-null keys.
             if (isset($values[$field])) {
                 $value = $values[$field];
             } elseif (array_key_exists($field, $values)) {
@@ -48,11 +57,46 @@ class Struct
             }
 
             if ($value !== null) {
-                // Type check (inlined fast path; isValidType only as fallback for class names).
                 if ($type !== 'mixed' && !self::isValidType($value, $type)) {
                     throw new InvalidArgumentException("Field '$field' must be of type $type");
                 }
-                // Rules: skip the whole loop if no rules are declared.
+                if ($rules !== []) {
+                    foreach ($rules as $rule) {
+                        if (is_callable($rule) && !$rule($value)) {
+                            throw new ValidationException("Validation failed for field '$field'");
+                        }
+                    }
+                }
+            }
+            $this->data[$field] = $value;
+        }
+    }
+
+    private function initFromCompiled(CompiledSchema $compiled, array $values): void
+    {
+        $this->schema = $compiled->original;
+        foreach ($compiled->fields as $field => $def) {
+            // $def is [type, nullable, default, rules, alias, required]
+            $alias = $def[4];
+
+            if (isset($values[$field])) {
+                $value = $values[$field];
+            } elseif (array_key_exists($field, $values)) {
+                $value = null;
+            } elseif ($alias !== null && array_key_exists($alias, $values)) {
+                $value = $values[$alias];
+            } elseif ($def[5]) { // required
+                throw new InvalidArgumentException("Field '$field' is required and has no value");
+            } else {
+                $value = $def[2]; // default
+            }
+
+            if ($value !== null) {
+                $type = $def[0];
+                if ($type !== 'mixed' && !self::isValidType($value, $type)) {
+                    throw new InvalidArgumentException("Field '$field' must be of type $type");
+                }
+                $rules = $def[3];
                 if ($rules !== []) {
                     foreach ($rules as $rule) {
                         if (is_callable($rule) && !$rule($value)) {
