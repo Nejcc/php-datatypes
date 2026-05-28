@@ -9,10 +9,20 @@ use Nejcc\PhpDatatypes\Exceptions\InvalidFloatException;
 
 final class FloatArray extends ArrayAbstraction implements \ArrayAccess
 {
-    public function __construct(array $value)
+    public function __construct(array $value, bool $trusted = false)
     {
-        $this->validateFloats($value);
+        if (!$trusted) {
+            $this->validateFloats($value);
+        }
         parent::__construct($value);
+    }
+
+    /**
+     * Construct without validation. Caller must guarantee every element is a float.
+     */
+    public static function fromTrusted(array $value): self
+    {
+        return new self($value, true);
     }
 
     public function get(int $index): ?float
