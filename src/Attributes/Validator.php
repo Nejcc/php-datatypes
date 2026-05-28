@@ -14,14 +14,27 @@ use InvalidArgumentException;
 final class Validator
 {
     /**
-     * Validate a property value against its attributes
+     * Cache of parsed attribute instances keyed by "Class::property".
+     *
+     * Reflection-driven attribute parsing is the dominant cost on this hot
+     * path (newInstance() per attribute, per call). Properties don't change
+     * structure at runtime, so we instantiate once and reuse.
+     *
+     * @var array<string, list<object>>
+     */
+    private static array $cache = [];
+
+    /**
+     * Validate a property value against its attributes.
      */
     public static function validateProperty(
         mixed $value,
         ReflectionProperty $property
     ): void {
-        foreach ($property->getAttributes() as $attribute) {
-            $instance = $attribute->newInstance();
+        $key = $property->class . '::' . $property->name;
+        $instances = self::$cache[$key] ??= self::compileAttributes($property);
+
+        foreach ($instances as $instance) {
             match (true) {
                 $instance instanceof Range => self::validateRange($value, $instance),
                 $instance instanceof Email => self::validateEmail($value),
@@ -33,6 +46,27 @@ final class Validator
                 $instance instanceof IpAddress => self::validateIpAddress($value),
             };
         }
+    }
+
+    /**
+     * @return list<object>
+     */
+    private static function compileAttributes(ReflectionProperty $property): array
+    {
+        $instances = [];
+        foreach ($property->getAttributes() as $attribute) {
+            $instances[] = $attribute->newInstance();
+        }
+        return $instances;
+    }
+
+    /**
+     * Clear the attribute cache. Useful for long-running processes that
+     * reload classes (rare) or for tests that want a clean slate.
+     */
+    public static function clearCache(): void
+    {
+        self::$cache = [];
     }
 
     private static function validateRange(mixed $value, Range $range): void
