@@ -15,8 +15,9 @@ class Struct
     public function __construct(array $schema, array $values = [])
     {
         // Backward compatibility: convert old format ['id' => 'int', ...] to new format
-        $first = reset($schema);
-        if (is_string($first)) {
+        // Fast path: peek first entry without resetting the array pointer.
+        $firstKey = array_key_first($schema);
+        if ($firstKey !== null && is_string($schema[$firstKey])) {
             $newSchema = [];
             foreach ($schema as $field => $type) {
                 $newSchema[$field] = ['type' => $type, 'nullable' => true];
@@ -25,17 +26,40 @@ class Struct
         }
         $this->schema = $schema;
         foreach ($schema as $field => $def) {
-            $alias = $def['alias'] ?? $field;
             $type = $def['type'] ?? 'mixed';
             $nullable = $def['nullable'] ?? false;
             $default = $def['default'] ?? null;
             $rules = $def['rules'] ?? [];
-            $value = $values[$field] ?? $values[$alias] ?? $default;
-            if ($value === null && !$nullable && $default === null && !array_key_exists($field, $values)) {
-                throw new InvalidArgumentException("Field '$field' is required and has no value");
+
+            // Resolve value: explicit field, then alias, then default.
+            // isset() short-circuits the array_key_exists call on the common
+            // non-null path; only fall through for missing-or-null keys.
+            if (isset($values[$field])) {
+                $value = $values[$field];
+            } elseif (array_key_exists($field, $values)) {
+                $value = null;
+            } elseif (isset($def['alias']) && array_key_exists($def['alias'], $values)) {
+                $value = $values[$def['alias']];
+            } else {
+                $value = $default;
+                if ($value === null && !$nullable && $default === null) {
+                    throw new InvalidArgumentException("Field '$field' is required and has no value");
+                }
             }
+
             if ($value !== null) {
-                $this->validateField($field, $value, $type, $rules, $nullable);
+                // Type check (inlined fast path; isValidType only as fallback for class names).
+                if ($type !== 'mixed' && !self::isValidType($value, $type)) {
+                    throw new InvalidArgumentException("Field '$field' must be of type $type");
+                }
+                // Rules: skip the whole loop if no rules are declared.
+                if ($rules !== []) {
+                    foreach ($rules as $rule) {
+                        if (is_callable($rule) && !$rule($value)) {
+                            throw new ValidationException("Validation failed for field '$field'");
+                        }
+                    }
+                }
             }
             $this->data[$field] = $value;
         }
@@ -46,26 +70,34 @@ class Struct
         if ($value === null && $nullable) {
             return;
         }
-        // Type check
-        if ($type !== 'mixed' && !$this->isValidType($value, $type)) {
+        if ($type !== 'mixed' && !self::isValidType($value, $type)) {
             throw new InvalidArgumentException("Field '$field' must be of type $type");
         }
-        // Rules
-        if (!array_all($rules, fn($rule) => !is_callable($rule) || $rule($value))) {
-            throw new ValidationException("Validation failed for field '$field'");
+        if ($rules !== []) {
+            foreach ($rules as $rule) {
+                if (is_callable($rule) && !$rule($value)) {
+                    throw new ValidationException("Validation failed for field '$field'");
+                }
+            }
         }
     }
 
-    protected function isValidType(mixed $value, string $type): bool
+    /**
+     * Fast type check. Static so it doesn't pay a $this dispatch.
+     * Match on the common scalar/array types first; only fall back to
+     * class_exists() when the type clearly isn't a builtin.
+     */
+    protected static function isValidType(mixed $value, string $type): bool
     {
-        if ($type === 'int' || $type === 'integer') return is_int($value);
-        if ($type === 'float' || $type === 'double') return is_float($value);
-        if ($type === 'string') return is_string($value);
-        if ($type === 'bool' || $type === 'boolean') return is_bool($value);
-        if ($type === 'array') return is_array($value);
-        if ($type === 'object') return is_object($value);
-        if (class_exists($type)) return $value instanceof $type;
-        return true;
+        return match ($type) {
+            'int', 'integer'   => is_int($value),
+            'float', 'double'  => is_float($value),
+            'string'           => is_string($value),
+            'bool', 'boolean'  => is_bool($value),
+            'array'            => is_array($value),
+            'object'           => is_object($value),
+            default            => class_exists($type) ? $value instanceof $type : true,
+        };
     }
 
     public function get(string $field): mixed
