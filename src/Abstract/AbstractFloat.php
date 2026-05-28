@@ -17,9 +17,15 @@ abstract class AbstractFloat
 
     /**
      * @param float $value
+     * @param bool $trusted Internal use only. When true, skips MIN/MAX and INF validation.
+     *                     Used by arithmetic ops that already pre-check the result.
      */
-    public function __construct(float $value)
+    public function __construct(float $value, bool $trusted = false)
     {
+        if ($trusted) {
+            $this->value = $value;
+            return;
+        }
         $this->setValue($value);
     }
 
@@ -36,27 +42,79 @@ abstract class AbstractFloat
         return $this->value;
     }
 
+    #[\NoDiscard('add() returns a new immutable Float; the original is unchanged so discarding the result is always a bug')]
     final public function add(self $other): static
     {
-        return new static($this->value + $other->value);
+        $result = $this->value + $other->value;
+        if (is_infinite($result)) {
+            throw new OutOfRangeException('INF and -INF are not allowed for this float type.');
+        }
+        if ($result > static::MAX_VALUE || $result < static::MIN_VALUE) {
+            throw new OutOfRangeException(sprintf(
+                'Value %f is out of range for this float type. Allowed range: [%f, %f]',
+                $result,
+                static::MIN_VALUE,
+                static::MAX_VALUE
+            ));
+        }
+        return new static($result, true);
     }
 
+    #[\NoDiscard('subtract() returns a new immutable Float; the original is unchanged so discarding the result is always a bug')]
     final public function subtract(self $other): static
     {
-        return new static($this->value - $other->value);
+        $result = $this->value - $other->value;
+        if (is_infinite($result)) {
+            throw new OutOfRangeException('INF and -INF are not allowed for this float type.');
+        }
+        if ($result > static::MAX_VALUE || $result < static::MIN_VALUE) {
+            throw new OutOfRangeException(sprintf(
+                'Value %f is out of range for this float type. Allowed range: [%f, %f]',
+                $result,
+                static::MIN_VALUE,
+                static::MAX_VALUE
+            ));
+        }
+        return new static($result, true);
     }
 
+    #[\NoDiscard('multiply() returns a new immutable Float; the original is unchanged so discarding the result is always a bug')]
     final public function multiply(self $other): static
     {
-        return new static($this->value * $other->value);
+        $result = $this->value * $other->value;
+        if (is_infinite($result)) {
+            throw new OutOfRangeException('INF and -INF are not allowed for this float type.');
+        }
+        if ($result > static::MAX_VALUE || $result < static::MIN_VALUE) {
+            throw new OutOfRangeException(sprintf(
+                'Value %f is out of range for this float type. Allowed range: [%f, %f]',
+                $result,
+                static::MIN_VALUE,
+                static::MAX_VALUE
+            ));
+        }
+        return new static($result, true);
     }
 
+    #[\NoDiscard('divide() returns a new immutable Float; the original is unchanged so discarding the result is always a bug')]
     final public function divide(self $other): static
     {
         if ($other->value === 0.0) {
             throw new \DivisionByZeroError('Division by zero.');
         }
-        return new static($this->value / $other->value);
+        $result = $this->value / $other->value;
+        if (is_infinite($result)) {
+            throw new OutOfRangeException('INF and -INF are not allowed for this float type.');
+        }
+        if ($result > static::MAX_VALUE || $result < static::MIN_VALUE) {
+            throw new OutOfRangeException(sprintf(
+                'Value %f is out of range for this float type. Allowed range: [%f, %f]',
+                $result,
+                static::MIN_VALUE,
+                static::MAX_VALUE
+            ));
+        }
+        return new static($result, true);
     }
 
     final public function equals(self $other): bool
