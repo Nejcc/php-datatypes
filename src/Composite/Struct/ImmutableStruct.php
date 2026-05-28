@@ -405,30 +405,37 @@ final class ImmutableStruct implements StructInterface
     private function validateValue(string $name, mixed $value): void
     {
         $type = $this->fields[$name]['type'];
-        $actualType = get_debug_type($value);
-        // Handle nullable types
-        if ($this->isNullable($type) && $value === null) {
+
+        // Inline nullable detection: str_starts_with($type, '?') without the call.
+        $nullable = ($type !== '' && $type[0] === '?');
+        if ($nullable && $value === null) {
             return;
         }
-        $baseType = $this->stripNullable($type);
+        $baseType = $nullable ? substr($type, 1) : $type;
+
         // Handle nested structs
         if (is_subclass_of($baseType, StructInterface::class)) {
             if (!($value instanceof $baseType)) {
                 throw new InvalidArgumentException(
+                    "Field '$name' expects type '$type', but got '" . get_debug_type($value) . "'"
+                );
+            }
+        } else {
+            // Handle primitive types
+            $actualType = get_debug_type($value);
+            if ($actualType !== $baseType && !is_subclass_of($value, $baseType)) {
+                throw new InvalidArgumentException(
                     "Field '$name' expects type '$type', but got '$actualType'"
                 );
             }
-            return;
         }
-        // Handle primitive types
-        if ($actualType !== $baseType && !is_subclass_of($value, $baseType)) {
-            throw new InvalidArgumentException(
-                "Field '$name' expects type '$type', but got '$actualType'"
-            );
-        }
-        // Apply validation rules
-        foreach ($this->fields[$name]['rules'] as $rule) {
-            $rule->validate($value, $name);
+
+        // Apply validation rules — skip the loop entirely when there are none.
+        $rules = $this->fields[$name]['rules'];
+        if ($rules !== []) {
+            foreach ($rules as $rule) {
+                $rule->validate($value, $name);
+            }
         }
     }
 
