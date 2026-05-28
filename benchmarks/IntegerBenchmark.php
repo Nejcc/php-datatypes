@@ -59,8 +59,8 @@ class IntegerBenchmark
 
     public function benchmarkInt8Arithmetic(): array
     {
-        $int1 = new Int8(50);
-        $int2 = new Int8(30);
+        $int1 = new Int8(5);
+        $int2 = new Int8(3);
 
         $start = microtime(true);
         $memoryStart = memory_get_usage();
@@ -84,8 +84,8 @@ class IntegerBenchmark
 
     public function benchmarkNativeIntArithmetic(): array
     {
-        $int1 = 50;
-        $int2 = 30;
+        $int1 = 5;
+        $int2 = 3;
 
         $start = microtime(true);
         $memoryStart = memory_get_usage();
@@ -131,10 +131,31 @@ class IntegerBenchmark
         ];
     }
 
+    public function benchmarkInt8Of(): array
+    {
+        $start = microtime(true);
+        $memoryStart = memory_get_usage();
+
+        for ($i = 0; $i < self::ITERATIONS; $i++) {
+            $int = Int8::of(42);
+        }
+
+        $end = microtime(true);
+        $memoryEnd = memory_get_usage();
+
+        return [
+            'time' => $end - $start,
+            'memory' => $memoryEnd - $memoryStart,
+            'iterations' => self::ITERATIONS,
+            'type' => 'Int8::of (cached)'
+        ];
+    }
+
     public function runAllBenchmarks(): array
     {
         return [
             'int8_creation' => $this->benchmarkInt8Creation(),
+            'int8_of' => $this->benchmarkInt8Of(),
             'native_int_creation' => $this->benchmarkNativeIntCreation(),
             'int8_arithmetic' => $this->benchmarkInt8Arithmetic(),
             'native_int_arithmetic' => $this->benchmarkNativeIntArithmetic(),

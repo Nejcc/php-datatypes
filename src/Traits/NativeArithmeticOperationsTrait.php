@@ -8,65 +8,81 @@ use Nejcc\PhpDatatypes\Interfaces\NativeIntegerInterface;
 
 trait NativeArithmeticOperationsTrait
 {
-    /**
-     * @param NativeIntegerInterface $other
-     *
-     * @return $this
-     */
+    #[\NoDiscard('add() returns a new immutable instance; the original is unchanged so discarding the result is always a bug')]
     public function add(NativeIntegerInterface $other): static
     {
-        return $this->performOperation($other, [$this, 'addValues'], 'add');
+        $result = $this->value + $other->getValue();
+        if ($result > static::MAX_VALUE) {
+            throw new \OverflowException('Result is out of bounds.');
+        }
+        if ($result < static::MIN_VALUE) {
+            throw new \UnderflowException('Result is out of bounds.');
+        }
+        return new static($result, true);
     }
 
-    /**
-     * @param NativeIntegerInterface $other
-     *
-     * @return $this
-     */
+    #[\NoDiscard('subtract() returns a new immutable instance; the original is unchanged so discarding the result is always a bug')]
     public function subtract(NativeIntegerInterface $other): static
     {
-        return $this->performOperation($other, [$this, 'subtractValues'], 'subtract');
+        $result = $this->value - $other->getValue();
+        if ($result > static::MAX_VALUE) {
+            throw new \OverflowException('Result is out of bounds.');
+        }
+        if ($result < static::MIN_VALUE) {
+            throw new \UnderflowException('Result is out of bounds.');
+        }
+        return new static($result, true);
     }
 
-    /**
-     * @param NativeIntegerInterface $other
-     *
-     * @return $this
-     */
+    #[\NoDiscard('multiply() returns a new immutable instance; the original is unchanged so discarding the result is always a bug')]
     public function multiply(NativeIntegerInterface $other): static
     {
-        return $this->performOperation($other, [$this, 'multiplyValues'], 'multiply');
+        $result = $this->value * $other->getValue();
+        if ($result > static::MAX_VALUE) {
+            throw new \OverflowException('Result is out of bounds.');
+        }
+        if ($result < static::MIN_VALUE) {
+            throw new \UnderflowException('Result is out of bounds.');
+        }
+        return new static($result, true);
     }
 
-    /**
-     * @param NativeIntegerInterface $other
-     *
-     * @return $this
-     */
+    #[\NoDiscard('divide() returns a new immutable instance; the original is unchanged so discarding the result is always a bug')]
     public function divide(NativeIntegerInterface $other): static
     {
-        return $this->performOperation($other, [$this, 'divideValues'], 'divide');
+        $b = $other->getValue();
+        if ($b === 0) {
+            throw new \DivisionByZeroError('Division by zero.');
+        }
+        $a = $this->value;
+        if ($a % $b !== 0) {
+            throw new \UnexpectedValueException('Division result is not an integer.');
+        }
+        $result = intdiv($a, $b);
+        if ($result > static::MAX_VALUE) {
+            throw new \OverflowException('Result is out of bounds.');
+        }
+        if ($result < static::MIN_VALUE) {
+            throw new \UnderflowException('Result is out of bounds.');
+        }
+        return new static($result, true);
     }
 
-    /**
-     * @param NativeIntegerInterface $other
-     *
-     * @return $this
-     */
+    #[\NoDiscard('mod() returns a new immutable instance; the original is unchanged so discarding the result is always a bug')]
     public function mod(NativeIntegerInterface $other): static
     {
-        return $this->performOperation($other, [$this, 'modValues'], 'mod');
+        $b = $other->getValue();
+        if ($b === 0) {
+            throw new \DivisionByZeroError('Division by zero.');
+        }
+        $result = $this->value % $b;
+        if ($result > static::MAX_VALUE) {
+            throw new \OverflowException('Result is out of bounds.');
+        }
+        if ($result < static::MIN_VALUE) {
+            throw new \UnderflowException('Result is out of bounds.');
+        }
+        return new static($result, true);
     }
-    /**
-     * @param NativeIntegerInterface $other
-     * @param callable $operation
-     * @param string $operationName
-     *
-     * @return $this
-     */
-    abstract protected function performOperation(
-        NativeIntegerInterface $other,
-        callable $operation,
-        string $operationName
-    ): static;
+
 }

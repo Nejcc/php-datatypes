@@ -26,10 +26,20 @@ final class StringArray extends ArrayAbstraction implements ArrayAccess, Countab
      *
      * @throws InvalidStringException
      */
-    public function __construct(array $value = [])
+    public function __construct(array $value = [], bool $trusted = false)
     {
-        $this->validateStrings($value);
+        if (!$trusted) {
+            $this->validateStrings($value);
+        }
         $this->value = $value;
+    }
+
+    /**
+     * Construct without validation. Caller must guarantee every element is a string.
+     */
+    public static function fromTrusted(array $value): self
+    {
+        return new self($value, true);
     }
 
     /**

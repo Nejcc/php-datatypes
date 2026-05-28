@@ -162,10 +162,33 @@ class ArrayBenchmark
         ];
     }
 
+    public function benchmarkIntArrayFromTrusted(): array
+    {
+        $data = range(1, self::ARRAY_SIZE);
+
+        $start = microtime(true);
+        $memoryStart = memory_get_usage();
+
+        for ($i = 0; $i < self::ITERATIONS; $i++) {
+            $array = IntArray::fromTrusted($data);
+        }
+
+        $end = microtime(true);
+        $memoryEnd = memory_get_usage();
+
+        return [
+            'time' => $end - $start,
+            'memory' => $memoryEnd - $memoryStart,
+            'iterations' => self::ITERATIONS,
+            'type' => 'IntArray::fromTrusted'
+        ];
+    }
+
     public function runAllBenchmarks(): array
     {
         return [
             'int_array_creation' => $this->benchmarkIntArrayCreation(),
+            'int_array_from_trusted' => $this->benchmarkIntArrayFromTrusted(),
             'native_array_creation' => $this->benchmarkNativeArrayCreation(),
             'int_array_operations' => $this->benchmarkIntArrayOperations(),
             'native_array_operations' => $this->benchmarkNativeArrayOperations(),

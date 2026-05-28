@@ -37,7 +37,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Nejcc\\PhpDatatypes\\Tests\\": "tests"
+            "Nejcc\\PhpDatatypes\\Tests\\": "tests",
+            "Nejcc\\PhpDatatypes\\Benchmarks\\": "benchmarks"
         }
     },
     "scripts": {

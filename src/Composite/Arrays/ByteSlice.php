@@ -24,10 +24,20 @@ final class ByteSlice extends ArrayAbstraction implements ArrayAccess, Countable
      *
      * @throws InvalidByteException If any value is not a valid byte.
      */
-    public function __construct(array $value)
+    public function __construct(array $value, bool $trusted = false)
     {
-        $this->validateBytes($value);
+        if (!$trusted) {
+            $this->validateBytes($value);
+        }
         $this->value = $value;
+    }
+
+    /**
+     * Construct without validation. Caller must guarantee every element is an int in 0..255.
+     */
+    public static function fromTrusted(array $value): self
+    {
+        return new self($value, true);
     }
 
     /**

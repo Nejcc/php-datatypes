@@ -29,9 +29,15 @@ abstract class AbstractBigInteger implements BigIntegerInterface
 
     /**
      * @param int|string $value
+     * @param bool $trusted Internal use only. When true, skips MIN/MAX validation.
+     *                     Used by arithmetic ops that already pre-check the result.
      */
-    public function __construct(int|string $value)
+    public function __construct(int|string $value, bool $trusted = false)
     {
+        if ($trusted) {
+            $this->value = (string)$value;
+            return;
+        }
         $this->setValue($value);
     }
 
@@ -76,98 +82,5 @@ abstract class AbstractBigInteger implements BigIntegerInterface
         }
 
         $this->value = $valueStr;
-    }
-
-
-
-    /**
-     * @param BigIntegerInterface|NativeIntegerInterface $other
-     * @param callable $operation
-     * @param string $operationName
-     *
-     * @return $this
-     */
-    protected function performOperation(
-        BigIntegerInterface|NativeIntegerInterface $other,
-        callable $operation,
-        string $operationName
-    ): static {
-        $result = $operation($this->value, (string)$other->getValue());
-
-        if (bccomp($result, (string)static::MIN_VALUE) < 0 || bccomp($result, (string)static::MAX_VALUE) > 0) {
-            $exceptionClass = bccomp($result, (string)static::MAX_VALUE) > 0 ? \OverflowException::class : \UnderflowException::class;
-            throw new $exceptionClass('Result is out of bounds.');
-        }
-
-        return new static($result);
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    protected function addValues(string $a, string $b): string
-    {
-        return bcadd($a, $b, 0);
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    protected function subtractValues(string $a, string $b): string
-    {
-        return bcsub($a, $b, 0);
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    protected function multiplyValues(string $a, string $b): string
-    {
-        return bcmul($a, $b, 0);
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    protected function divideValues(string $a, string $b): string
-    {
-        if ($b === '0') {
-            throw new \DivisionByZeroError('Division by zero.');
-        }
-
-        // Check if $a is evenly divisible by $b
-        $mod = bcmod($a, $b);
-        if ($mod !== '0') {
-            throw new \UnexpectedValueException('Division result is not an integer.');
-        }
-
-        return bcdiv($a, $b, 0);
-    }
-
-    /**
-     * @param string $a
-     * @param string $b
-     *
-     * @return string
-     */
-    protected function modValues(string $a, string $b): string
-    {
-        if ($b === '0') {
-            throw new \DivisionByZeroError('Division by zero.');
-        }
-
-        return bcmod($a, $b);
     }
 }

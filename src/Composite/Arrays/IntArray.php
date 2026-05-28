@@ -8,13 +8,25 @@ use Nejcc\PhpDatatypes\Abstract\ArrayAbstraction;
 
 final class IntArray extends ArrayAbstraction
 {
-    public function __construct(array $value)
+    public function __construct(array $value, bool $trusted = false)
     {
-        if (!array_all($value, fn($item) => is_int($item))) {
-            $invalidItem = array_find($value, fn($item) => !is_int($item));
-            throw new \InvalidArgumentException("All elements must be integers. Invalid value: " . json_encode($invalidItem));
+        if (!$trusted) {
+            foreach ($value as $item) {
+                if (!is_int($item)) {
+                    throw new \InvalidArgumentException('All elements must be integers. Invalid value: ' . json_encode($item));
+                }
+            }
         }
         parent::__construct($value);
+    }
+
+    /**
+     * Construct without validation. Caller must guarantee every element is an int.
+     * Use only in performance-critical paths where the input is already trusted.
+     */
+    public static function fromTrusted(array $value): self
+    {
+        return new self($value, true);
     }
 
     public function get(int $index): int
