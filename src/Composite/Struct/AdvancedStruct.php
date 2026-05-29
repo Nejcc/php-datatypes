@@ -16,17 +16,36 @@ class AdvancedStruct
     {
         $this->schema = $schema;
         foreach ($schema as $field => $def) {
-            $alias = $def['alias'] ?? $field;
             $type = $def['type'] ?? 'mixed';
             $nullable = $def['nullable'] ?? false;
             $default = $def['default'] ?? null;
             $rules = $def['rules'] ?? [];
-            $value = $values[$field] ?? $values[$alias] ?? $default;
-            if ($value === null && !$nullable && $default === null && !array_key_exists($field, $values)) {
-                throw new InvalidArgumentException("Field '$field' is required and has no value");
+
+            // Resolve value: explicit field, then alias, then default.
+            if (isset($values[$field])) {
+                $value = $values[$field];
+            } elseif (array_key_exists($field, $values)) {
+                $value = null;
+            } elseif (isset($def['alias']) && array_key_exists($def['alias'], $values)) {
+                $value = $values[$def['alias']];
+            } else {
+                $value = $default;
+                if ($value === null && !$nullable && $default === null) {
+                    throw new InvalidArgumentException("Field '$field' is required and has no value");
+                }
             }
+
             if ($value !== null) {
-                $this->validateField($field, $value, $type, $rules, $nullable);
+                if ($type !== 'mixed' && !self::isValidType($value, $type)) {
+                    throw new InvalidArgumentException("Field '$field' must be of type $type");
+                }
+                if ($rules !== []) {
+                    foreach ($rules as $rule) {
+                        if (is_callable($rule) && !$rule($value)) {
+                            throw new ValidationException("Validation failed for field '$field'");
+                        }
+                    }
+                }
             }
             $this->data[$field] = $value;
         }
@@ -37,30 +56,29 @@ class AdvancedStruct
         if ($value === null && $nullable) {
             return;
         }
-        // Type check
-        if ($type !== 'mixed' && !$this->isValidType($value, $type)) {
+        if ($type !== 'mixed' && !self::isValidType($value, $type)) {
             throw new InvalidArgumentException("Field '$field' must be of type $type");
         }
-        // Rules
-        foreach ($rules as $rule) {
-            if (is_callable($rule)) {
-                if (!$rule($value)) {
+        if ($rules !== []) {
+            foreach ($rules as $rule) {
+                if (is_callable($rule) && !$rule($value)) {
                     throw new ValidationException("Validation failed for field '$field'");
                 }
             }
         }
     }
 
-    protected function isValidType($value, $type): bool
+    protected static function isValidType(mixed $value, string $type): bool
     {
-        if ($type === 'int' || $type === 'integer') return is_int($value);
-        if ($type === 'float' || $type === 'double') return is_float($value);
-        if ($type === 'string') return is_string($value);
-        if ($type === 'bool' || $type === 'boolean') return is_bool($value);
-        if ($type === 'array') return is_array($value);
-        if ($type === 'object') return is_object($value);
-        if (class_exists($type)) return $value instanceof $type;
-        return true;
+        return match ($type) {
+            'int', 'integer'   => is_int($value),
+            'float', 'double'  => is_float($value),
+            'string'           => is_string($value),
+            'bool', 'boolean'  => is_bool($value),
+            'array'            => is_array($value),
+            'object'           => is_object($value),
+            default            => class_exists($type) ? $value instanceof $type : true,
+        };
     }
 
     public function get(string $field)
